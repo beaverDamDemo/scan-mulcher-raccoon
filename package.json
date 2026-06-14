@@ -4,7 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:dev": "ng serve",
+    "start:phone": "ng serve --host 0.0.0.0 --allowed-hosts=true",
+    "dev": "ng serve",
     "build": "ng build",
+    "tunnel": "\"C:\\Program Files (x86)\\cloudflared\\cloudflared.exe\" tunnel --url http://localhost:4200",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:scan-mulcher-raccoon": "node dist/scan-mulcher-raccoon/server/server.mjs"
@@ -22,6 +26,7 @@
     "@angular/ssr": "^22.0.1",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
+    "tesseract.js": "^7.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

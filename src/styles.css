@@ -1,3 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+:root {
+  --ui-success-50: #ecfdf3;
+  --ui-success-700: #166534;
+  --ui-danger-50: #fef2f2;
+  --ui-danger-500: #ef4444;
+  --ui-danger-600: #dc2626;
+  --ui-danger-700: #b91c1c;
+  --ui-warning-200: #fde68a;
+  --ui-warning-500: #f59e0b;
+}
