@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "start:dev": "ng serve",
+    "start": "ng serve --host 0.0.0.0 --allowed-hosts=true",
+    "start:dev": "ng serve --host 0.0.0.0 --allowed-hosts=true",
     "start:phone": "ng serve --host 0.0.0.0 --allowed-hosts=true",
-    "dev": "ng serve",
+    "dev": "ng serve --host 0.0.0.0 --allowed-hosts=true",
     "build": "ng build",
     "tunnel": "\"C:\\Program Files (x86)\\cloudflared\\cloudflared.exe\" tunnel --url http://localhost:4200",
     "watch": "ng build --watch --configuration development",

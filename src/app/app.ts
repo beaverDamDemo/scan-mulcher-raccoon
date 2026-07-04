@@ -71,7 +71,7 @@ export class App {
   protected readonly canSave = computed(() => !!this.session() && this.storageConfigured() && !this.busy());
   protected readonly tokenDraftEmpty = computed(() => this.dropboxTokenDraft().trim().length === 0);
   protected readonly dropboxTokenStatus = computed(() =>
-    this.dropboxConfigured() ? 'Stored on this device only' : 'No Dropbox token saved on this device',
+    this.dropboxConfigured() ? 'Stored locally' : 'No token saved',
   );
   protected readonly statusMessage = computed(() => {
     switch (this.state()) {
