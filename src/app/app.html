@@ -129,7 +129,8 @@
 
             <button type="button"
               class="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
-              [class.bg-emerald-400]="state() === 'camera-ready'" [class.text-slate-950]="state() === 'camera-ready'"
+              [class.bg-emerald-400]="state() === 'camera-ready' || state() === 'starting-camera'"
+              [class.text-slate-950]="state() === 'camera-ready' || state() === 'starting-camera'"
               (click)="captureFrame()" [disabled]="state() !== 'camera-ready'">
               Capture frame
             </button>
@@ -142,6 +143,16 @@
                 [disabled]="!storageConfigured()" />
             </label>
 
+
+          </div>
+
+          @if (!session()) {
+          <div
+            class="mt-5 rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 px-4 py-8 text-center text-sm leading-6 text-slate-500">
+            Capture a frame or upload a label image to populate the extraction panel.
+          </div>
+
+          <div class="mt-4 flex gap-3 justify-end">
             <button type="button"
               class="inline-flex items-center justify-center rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-200"
               (click)="saveScan()" [disabled]="!canSave()">
@@ -154,6 +165,7 @@
               Reset
             </button>
           </div>
+          }
         </div>
 
         @if (errorMessage()) {
@@ -230,26 +242,6 @@
               </div>
             </div>
           </div>
-          } @else {
-          <div
-            class="mt-5 rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 px-4 py-8 text-center text-sm leading-6 text-slate-500">
-            Capture a frame or upload a label image to populate the extraction panel.
-          </div>
-
-          <div class="mt-4 flex gap-3 justify-end">
-            <button type="button"
-              class="inline-flex items-center justify-center rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-200"
-              (click)="saveScan()" [disabled]="!canSave()">
-              Save result
-            </button>
-
-            <button type="button"
-              class="inline-flex items-center justify-center rounded-2xl border border-rose-600 bg-rose-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-600 hover:border-rose-700 disabled:cursor-not-allowed disabled:opacity-50"
-              (click)="clearSession()" [disabled]="busy()">
-              Reset
-            </button>
-          </div>
-
           }
         </section>
 
