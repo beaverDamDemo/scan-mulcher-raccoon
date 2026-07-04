@@ -151,7 +151,9 @@
             class="mt-5 rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 px-4 py-8 text-center text-sm leading-6 text-slate-500">
             Capture a frame or upload a label image to populate the extraction panel.
           </div>
+          }
 
+          @if (session(); as activeSession) {
           <div class="mt-4 flex gap-3 justify-end">
             <button type="button"
               class="inline-flex items-center justify-center rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:bg-slate-500 disabled:text-slate-200"
