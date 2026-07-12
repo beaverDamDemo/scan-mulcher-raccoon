@@ -1,0 +1,24 @@
+.tile-viewport {
+  width: 444px;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #000;
+  position: relative;
+}
+
+.tile-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform 180ms ease;
+  display: block;
+}
+
+.tile-bg {
+  width: 444px;
+  height: 280px;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border-radius: 0.5rem;
+}

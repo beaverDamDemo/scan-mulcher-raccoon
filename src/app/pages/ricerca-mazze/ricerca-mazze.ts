@@ -1,6 +1,7 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import masterData from './mazze-master.json';
 
 interface BladeRecord {
   pageTag: string;
@@ -11,6 +12,7 @@ interface BladeRecord {
   rMm: string;
   pesoKg: string;
   applicazioni: string;
+  index: number;
 }
 
 type BladeSortColumn = keyof BladeRecord;
@@ -23,7 +25,9 @@ type SortDirection = 'asc' | 'desc';
   styleUrl: './ricerca-mazze.css',
 })
 export class RicercaMazze {
-  protected readonly sortColumn = signal<BladeSortColumn>('articolo');
+  private previousActiveElement: Element | null = null;
+  // Default to the original CSV order by sorting on the numeric `index`.
+  protected readonly sortColumn = signal<BladeSortColumn>('index');
   protected readonly sortDirection = signal<SortDirection>('asc');
   protected readonly aMin = signal('10');
   protected readonly aMax = signal('87');
@@ -36,63 +40,39 @@ export class RicercaMazze {
   protected readonly foroValue = signal('');
   protected readonly modalOpen = signal(false);
   protected readonly modalImage = signal('');
-  protected readonly blades: readonly BladeRecord[] = [
-    { pageTag: '48/03', articolo: '56194', aMm: '60', bMm: '70', foroOrAsola: '30.5', rMm: '80', pesoKg: '1.50', applicazioni: 'SEPPI; FAE; BERTI; ORSI; AGRIMASTER; PICURSA' },
-    { pageTag: '48/03', articolo: '56808', aMm: '60', bMm: '70', foroOrAsola: '31', rMm: '78', pesoKg: '1.53', applicazioni: 'SEPPI' },
-    { pageTag: '48/03', articolo: '57591', aMm: '80', bMm: '70', foroOrAsola: '31', rMm: '85', pesoKg: '1.90', applicazioni: 'BERTI Forestale' },
-    { pageTag: '48/03', articolo: '57461', aMm: '39', bMm: '100', foroOrAsola: '14.5', rMm: '103', pesoKg: '0.70', applicazioni: 'AGRIMASTER' },
-    { pageTag: '48/03', articolo: '57462', aMm: '39', bMm: '100', foroOrAsola: '16.5', rMm: '103', pesoKg: '0.70', applicazioni: 'AGRIMASTER' },
-    { pageTag: '48/03', articolo: '56599', aMm: '39', bMm: '100', foroOrAsola: '20.5', rMm: '103', pesoKg: '0.70', applicazioni: '' },
-    { pageTag: '48/03', articolo: '56600', aMm: '30', bMm: '120', foroOrAsola: '25.5', rMm: '120', pesoKg: '0.88', applicazioni: 'AGRIMASTER' },
-    { pageTag: '48/03', articolo: '57466', aMm: '40', bMm: '95', foroOrAsola: '12.5', rMm: '95', pesoKg: '0.62', applicazioni: 'SICMA; FERRI (OEM 0901194); AGRICOM; PERUZZO' },
-    { pageTag: '48/03', articolo: '56802', aMm: '40', bMm: '95', foroOrAsola: '16.5', rMm: '95', pesoKg: '0.62', applicazioni: '' },
-    { pageTag: '48/03', articolo: '56189', aMm: '40', bMm: '85', foroOrAsola: '14.5', rMm: '95', pesoKg: '0.70', applicazioni: 'AGRIMASTER (71009); AGROMEC (300.10.95); ORSI; SICMA; ZANON; DEL MORINO' },
-    { pageTag: '48/03', articolo: '56190', aMm: '40', bMm: '85', foroOrAsola: '16.5', rMm: '95', pesoKg: '0.70', applicazioni: 'AGRIMASTER; MASCHIO 07400950R; UBALDI; ACMA; AGRICOM; ORTOLAN; PICURSA' },
-    { pageTag: '48/03', articolo: '57617', aMm: '40', bMm: '85', foroOrAsola: '20.5', rMm: '95', pesoKg: '0.70', applicazioni: 'AGRIMASTER (3009799)' },
-    { pageTag: '49/03', articolo: '56601', aMm: '70', bMm: '160', foroOrAsola: '20.5', rMm: '160', pesoKg: '2.25', applicazioni: 'FACMA; AGRICOM' },
-    { pageTag: '49/03', articolo: '56117', aMm: '70', bMm: '160', foroOrAsola: '22.5', rMm: '160', pesoKg: '2.25', applicazioni: 'FACMA' },
-    { pageTag: '49/03', articolo: '56803', aMm: '10', bMm: '85', foroOrAsola: '14.5', rMm: '100', pesoKg: '0.38', applicazioni: 'MURATORI OEM 12019400' },
-    { pageTag: '49/03', articolo: '57318', aMm: '42', bMm: '80', foroOrAsola: '13', rMm: '80', pesoKg: '0.42', applicazioni: 'GEO; FEMAC' },
-    { pageTag: '49/03', articolo: '56789', aMm: '30', bMm: '105', foroOrAsola: '36.5', rMm: '75', pesoKg: '1.25', applicazioni: 'MERITANO' },
-    { pageTag: '49/03', articolo: '56806', aMm: '22', bMm: '75', foroOrAsola: '16.5', rMm: '92', pesoKg: '0.67', applicazioni: 'HMF; VIGOLO' },
-    { pageTag: '49/03', articolo: '57317', aMm: '40', bMm: '130', foroOrAsola: '16.5', rMm: '110', pesoKg: '1.05', applicazioni: 'MASCHIO (BC; BE; BL; VITA; BELLA; BRAVA; TRITONE)' },
-    { pageTag: '49/03', articolo: '57443', aMm: '44', bMm: '60', foroOrAsola: '25.5', rMm: '70', pesoKg: '0.75', applicazioni: 'AGRIMASTER OEM 3008045' },
-    { pageTag: '49/03', articolo: '57459', aMm: '47', bMm: '85', foroOrAsola: '14.5', rMm: '97', pesoKg: '0.65', applicazioni: 'AGRIMASTER' },
-    { pageTag: '49/03', articolo: '57384', aMm: '10', bMm: '62', foroOrAsola: '14.5', rMm: '62', pesoKg: '0.21', applicazioni: 'CALDERONI; ORSI; TORTELLA; UBALDI; FERRI; SICMA' },
-    { pageTag: '49/03', articolo: '56792', aMm: '51', bMm: '88', foroOrAsola: '26', rMm: '180', pesoKg: '2.17', applicazioni: 'NOBILI' },
-    { pageTag: '50/03', articolo: '57460', aMm: '73', bMm: '165', foroOrAsola: '18.5', rMm: '114', pesoKg: '1.75', applicazioni: 'FACMA' },
-    { pageTag: '50/03', articolo: '57464', aMm: '24', bMm: '64', foroOrAsola: '16.5', rMm: '113', pesoKg: '0.75', applicazioni: 'FERRI OEM 0901147' },
-    { pageTag: '50/03', articolo: '57467', aMm: '32', bMm: '95', foroOrAsola: '22.5', rMm: '100', pesoKg: '0.70', applicazioni: 'NOBILI' },
-    { pageTag: '50/03', articolo: '57608', aMm: '40', bMm: '95', foroOrAsola: '16.5', rMm: '95', pesoKg: '0.78', applicazioni: 'SICMA' },
-    { pageTag: '50/03', articolo: '57468', aMm: '45', bMm: '125', foroOrAsola: '25.5', rMm: '177', pesoKg: '1.55', applicazioni: 'MASCHIO OEM T30004025' },
-    { pageTag: '50/03', articolo: '57465', aMm: '10', bMm: '65', foroOrAsola: '12.5', rMm: '87', pesoKg: '0.20', applicazioni: 'PERUZZO' },
-    { pageTag: '50/03', articolo: '57463', aMm: '24', bMm: '100', foroOrAsola: '16.5', rMm: '110', pesoKg: '0.95', applicazioni: 'FERRI OEM 0901134' },
-    { pageTag: '50/03', articolo: '57630', aMm: '54', bMm: '148', foroOrAsola: '25.5', rMm: '96', pesoKg: '2.04', applicazioni: 'FALC' },
-    { pageTag: '50/03', articolo: '57733', aMm: '54', bMm: '148', foroOrAsola: '20.5', rMm: '96', pesoKg: '2.04', applicazioni: 'FALC (new)' },
-    { pageTag: '51/03', articolo: '57631', aMm: '54', bMm: '105', foroOrAsola: '25.5', rMm: '95', pesoKg: '1.60', applicazioni: 'FALC' },
-    { pageTag: '51/03', articolo: '57696', aMm: '70', bMm: '118', foroOrAsola: '16.5', rMm: '110', pesoKg: '1.47', applicazioni: 'FERRI OEM 0901196' },
-    { pageTag: '51/03', articolo: '57715', aMm: '81', bMm: '171', foroOrAsola: '20.5', rMm: '95', pesoKg: '2.70', applicazioni: 'FERNANDEZ' },
-    { pageTag: '51/03', articolo: '57713', aMm: '80', bMm: '190', foroOrAsola: '18.5', rMm: '95', pesoKg: '2.00', applicazioni: 'NIUBO' },
-    { pageTag: '51/03', articolo: '57714', aMm: '80', bMm: '190', foroOrAsola: '23', rMm: '95', pesoKg: '2.00', applicazioni: 'NIUBO' },
-    { pageTag: '51/03', articolo: '57697', aMm: '13', bMm: '40', foroOrAsola: '16x32', rMm: '75', pesoKg: '0.41', applicazioni: 'BOMFORD; BRUNI' },
-    { pageTag: '51/03', articolo: '57632', aMm: '40', bMm: '100', foroOrAsola: '20.5', rMm: '171', pesoKg: '1.95', applicazioni: 'BERTI tipo lungo' },
-    { pageTag: '51/03', articolo: '57693', aMm: '42', bMm: '105', foroOrAsola: '16.5', rMm: '120', pesoKg: '1.40', applicazioni: 'FERRI' },
-    { pageTag: '51/03', articolo: '57694', aMm: '42', bMm: '105', foroOrAsola: '20.5', rMm: '120', pesoKg: '', applicazioni: 'FERRI' },
-    { pageTag: '51/03', articolo: '57695', aMm: '42', bMm: '105', foroOrAsola: '25.5', rMm: '120', pesoKg: '', applicazioni: 'FEMAC' },
-    { pageTag: '51/03', articolo: '57676', aMm: '70', bMm: '170', foroOrAsola: '16.5', rMm: '90', pesoKg: '2.10', applicazioni: 'KUHN DX' },
-    { pageTag: '51/03', articolo: '57677', aMm: '70', bMm: '170', foroOrAsola: '20.5', rMm: '90', pesoKg: '', applicazioni: 'HMF' },
-    { pageTag: '52/03', articolo: '57708', aMm: '81', bMm: '125', foroOrAsola: '35', rMm: '109', pesoKg: '2.70', applicazioni: 'SERRAT' },
-    { pageTag: '52/03', articolo: '57710', aMm: '60', bMm: '151', foroOrAsola: '28.5', rMm: '98', pesoKg: '1.90', applicazioni: 'TMC CANCELA' },
-    { pageTag: '52/03', articolo: '57712', aMm: '80', bMm: '110', foroOrAsola: '28.5', rMm: '98', pesoKg: '2.27', applicazioni: 'TMC CANCELA' },
-    { pageTag: '52/03', articolo: '57731', aMm: '40', bMm: '90', foroOrAsola: '16.5', rMm: '100', pesoKg: '0.87', applicazioni: 'COSMO; GEO; STARK' },
-    { pageTag: '52/03', articolo: '57727', aMm: '51', bMm: '115', foroOrAsola: '26', rMm: '175', pesoKg: '1.42', applicazioni: 'KUHN' },
-    { pageTag: '52/03', articolo: '57728', aMm: '13', bMm: '78', foroOrAsola: '12.5', rMm: '75', pesoKg: '0.28', applicazioni: 'COSMO; MASCHIO; DRAGONE' },
-    { pageTag: '52/03', articolo: '57729', aMm: '13', bMm: '78', foroOrAsola: '14.5', rMm: '75', pesoKg: '0.28', applicazioni: '' },
-    { pageTag: '52/03', articolo: '57730', aMm: '13', bMm: '78', foroOrAsola: '16.5', rMm: '75', pesoKg: '0.28', applicazioni: '' },
-    { pageTag: '52/03', articolo: '57711', aMm: '87', bMm: '224', foroOrAsola: '20.5', rMm: '78', pesoKg: '2.70', applicazioni: 'TMC CANCELA' },
-    { pageTag: '52/03', articolo: '57709', aMm: '82', bMm: '123', foroOrAsola: '20.5', rMm: '105', pesoKg: '2.00', applicazioni: 'SERRAT' },
-    { pageTag: '52a/03', articolo: '', aMm: '', bMm: '', foroOrAsola: '', rMm: '', pesoKg: '', applicazioni: '' },
-  ];
+  protected readonly modalCol = signal(0);
+  protected readonly modalRow = signal(0);
+  protected readonly modalX = signal(0);
+  protected readonly modalY = signal(0);
+  protected readonly modalLabel = signal('');
+  protected readonly modalLoaded = signal(false);
+  protected readonly modalLoadError = signal(false);
+  protected readonly modalNaturalWidth = signal(0);
+  protected readonly modalNaturalHeight = signal(0);
+  protected readonly modalUseFallback = signal(false);
+  protected readonly modalUseCanvas = signal(false);
+  // Use `masterData` as the single source of truth for blades and coordinates.
+  protected readonly blades: readonly BladeRecord[] = (masterData as Array<any>).map((c: any, i: number) => ({
+    pageTag: c.pageTag || ((): string => {
+      const m = /mazze-set-(\d+)\.png$/.exec(c.image || '');
+      return m ? m[1] : String(Math.floor(i / 16));
+    })(),
+    articolo: c.articolo || `MZ-${i}`,
+    aMm: c.aMm || '',
+    bMm: c.bMm || '',
+    foroOrAsola: c.foroOrAsola || '',
+    rMm: c.rMm || '',
+    pesoKg: c.pesoKg || '',
+    applicazioni: c.applicazioni || '',
+    index: i,
+  }));
+
+  // Build a lightweight coordinates view for lookup by index (used by openMazzaImage)
+  private readonly coordinates = (masterData as Array<any>).map((c: any) => ({
+    image: c.image || '',
+    x: typeof c.x === 'number' ? c.x : 0,
+    y: typeof c.y === 'number' ? c.y : 0,
+  }));
 
   protected readonly foroValues = computed(() => Array.from(
     new Set(this.blades.map((blade) => blade.foroOrAsola).filter((value) => value !== '' && Number.isFinite(Number(value)))),
@@ -115,12 +95,12 @@ export class RicercaMazze {
       const leftValue = left[column];
       const rightValue = right[column];
 
-      if (!leftValue || !rightValue) {
-        if (!leftValue && !rightValue) {
-          return 0;
-        }
-
-        return leftValue ? -1 : 1;
+      const leftMissing = leftValue === null || leftValue === undefined || leftValue === '';
+      const rightMissing = rightValue === null || rightValue === undefined || rightValue === '';
+      if (leftMissing || rightMissing) {
+        if (leftMissing && rightMissing) return 0;
+        // Put missing values after present ones
+        return leftMissing ? 1 : -1;
       }
 
       const leftNumber = Number(leftValue);
@@ -128,7 +108,7 @@ export class RicercaMazze {
       const areNumbers = Number.isFinite(leftNumber) && Number.isFinite(rightNumber);
       const comparison = areNumbers
         ? leftNumber - rightNumber
-        : leftValue.localeCompare(rightValue, 'it', { numeric: true, sensitivity: 'base' });
+        : String(leftValue).localeCompare(String(rightValue), 'it', { numeric: true, sensitivity: 'base' });
 
       return comparison * multiplier;
     });
@@ -216,12 +196,228 @@ export class RicercaMazze {
     const page = Math.floor(index / 16);
     const imagePath = `/assets/images/mazze-set-${page}.png`;
 
-    this.modalImage.set(imagePath);
+    const indexWithinSet = index % 16;
+
+    // Try to read pixel coordinates from the master coordinates.
+    const coord = (this.coordinates as Array<{ image: string; x: number; y: number; }>)[index];
+
+    if (coord) {
+      this.modalImage.set(coord.image || imagePath);
+      this.modalX.set(coord.x || 0);
+      this.modalY.set(coord.y || 0);
+      this.modalLabel.set(`${blade.articolo || '—'} (${index})`);
+
+      this.modalLoaded.set(false);
+      this.modalLoadError.set(false);
+      this.modalNaturalWidth.set(0);
+      this.modalNaturalHeight.set(0);
+
+      // Also compute col/row for legacy UI uses (if needed).
+      const col = Math.round((coord.x || 0) / 444);
+      const row = Math.round(((coord.y || 0) - 40) / 280);
+      this.modalCol.set(Math.max(0, Math.min(3, col)));
+      this.modalRow.set(Math.max(0, Math.min(3, row)));
+    } else {
+      this.modalLabel.set(`${blade.articolo || '—'} (${index})`);
+      this.modalLoaded.set(false);
+      this.modalLoadError.set(false);
+      this.modalNaturalWidth.set(0);
+      this.modalNaturalHeight.set(0);
+      const col = indexWithinSet % 4; // 0..3
+      const row = Math.floor(indexWithinSet / 4); // 0..3
+      this.modalCol.set(col);
+      this.modalRow.set(row);
+      this.modalX.set(col * 444);
+      this.modalY.set(row * 280 + 40);
+      this.modalImage.set(imagePath);
+    }
+    // Start a lightweight preload probe to determine if the image is actually reachable
+    // and to capture natural sizes reliably without depending on `NgOptimizedImage` events.
+    const probeUrl = this.modalImage();
+    const probe = new Image();
+    probe.decoding = 'async';
+    probe.onload = () => {
+      console.debug('[ricerca-mazze] probe.onload', probe.src, probe.naturalWidth, probe.naturalHeight);
+      this.modalNaturalWidth.set(probe.naturalWidth || 0);
+      this.modalNaturalHeight.set(probe.naturalHeight || 0);
+      this.modalLoaded.set(true);
+      this.modalLoadError.set(false);
+      // Use the native `src` attribute path in the template to avoid any optimized-loader
+      // edge-cases that may suppress load events in the rendered <img> element.
+      this.modalUseFallback.set(true);
+    };
+    probe.onerror = () => {
+      console.debug('[ricerca-mazze] probe.onerror', probe.src);
+      this.modalLoaded.set(false);
+      this.modalLoadError.set(true);
+      this.modalNaturalWidth.set(0);
+      this.modalNaturalHeight.set(0);
+      // Fallback to native `src` and let the DOM image attempt again.
+      this.modalUseFallback.set(true);
+    };
+    // Trigger the probe async load.
+    probe.src = probeUrl;
+
+    // Save currently focused element so we can restore focus on close.
+    this.previousActiveElement = document.activeElement as Element | null;
     this.modalOpen.set(true);
+    // Focus the modal overlay so it receives keyboard events (Escape).
+    setTimeout(() => {
+      const overlay = document.querySelector('.ricerca-mazze-modal') as HTMLElement | null;
+      if (overlay) overlay.focus();
+    }, 0);
+    this.checkModalAttempts = 0;
+    setTimeout(this.checkModalImageReady, 100);
   }
 
   protected closeMazzaImage(): void {
     this.modalOpen.set(false);
     this.modalImage.set('');
+    // Restore previous focus when modal closes.
+    try {
+      if (this.previousActiveElement instanceof HTMLElement) {
+        (this.previousActiveElement as HTMLElement).focus();
+      }
+    } catch (e) {
+      // ignore
+    }
   }
+
+  protected onModalImageLoad(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    const natW = img.naturalWidth || 0;
+    const natH = img.naturalHeight || 0;
+    console.debug('[ricerca-mazze] onModalImageLoad', img.src, img.complete, natW, natH);
+    this.modalLoaded.set(true);
+    this.modalLoadError.set(false);
+    this.modalNaturalWidth.set(natW);
+    this.modalNaturalHeight.set(natH);
+
+    // Clamp modalX/modalY so the 444x280 viewport stays inside the image bounds.
+    const maxX = Math.max(0, natW - 444);
+    const maxY = Math.max(0, natH - 280);
+    const curX = this.modalX();
+    const curY = this.modalY();
+    const clampedX = Math.max(0, Math.min(maxX, curX));
+    const clampedY = Math.max(0, Math.min(maxY, curY));
+    if (clampedX !== curX) this.modalX.set(clampedX);
+    if (clampedY !== curY) this.modalY.set(clampedY);
+    this.modalUseFallback.set(false);
+    // If we successfully loaded via <img>, ensure canvas fallback is off
+    this.modalUseCanvas.set(false);
+    // Ensure the rendered <img> uses the image's natural pixel size so our
+    // translation coordinates (which are in natural pixels) align correctly.
+    try {
+      img.style.width = natW + 'px';
+      img.style.height = natH + 'px';
+      img.style.maxWidth = 'none';
+      img.style.maxHeight = 'none';
+      img.style.objectFit = 'none';
+    } catch (e) {
+      console.debug('[ricerca-mazze] failed to set img inline styles', e);
+    }
+    // If canvas was active, turn it off because the <img> rendered successfully.
+    this.modalUseCanvas.set(false);
+  }
+
+  protected onModalImageError(): void {
+    console.debug('[ricerca-mazze] onModalImageError', this.modalImage());
+    this.modalLoaded.set(false);
+    this.modalLoadError.set(true);
+    this.modalNaturalWidth.set(0);
+    this.modalNaturalHeight.set(0);
+    this.modalUseFallback.set(true);
+    // try canvas fallback automatically when image element reports error
+    this.modalUseCanvas.set(true);
+    setTimeout(() => this.renderCanvasCrop(), 60);
+  }
+
+  protected toggleCanvasView(): void {
+    this.modalUseCanvas.update((v) => !v);
+    if (this.modalUseCanvas()) {
+      // render immediately
+      setTimeout(() => this.renderCanvasCrop(), 50);
+    }
+  }
+
+  protected renderCanvasCrop(): void {
+    const canvas = document.querySelector('.tile-canvas') as HTMLCanvasElement | null;
+    if (!canvas) {
+      console.debug('[ricerca-mazze] renderCanvasCrop: canvas not found');
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const sx = Math.max(0, Math.floor(this.modalX()));
+      const sy = Math.max(0, Math.floor(this.modalY()));
+      const sw = 444;
+      const sh = 280;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      try {
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+        console.debug('[ricerca-mazze] renderCanvasCrop: drawn', img.src, sx, sy, sw, sh);
+      } catch (err) {
+        console.debug('[ricerca-mazze] renderCanvasCrop error', err);
+      }
+    };
+    img.onerror = () => console.debug('[ricerca-mazze] renderCanvasCrop: image load error', this.modalImage());
+    img.src = this.modalImage();
+  }
+
+  // Some browsers or the NgOptimizedImage behavior can prevent the native load event
+  // from firing in certain circumstances. As a fallback we poll the DOM for the
+  // rendered image and check its `naturalWidth` to decide whether it loaded.
+  private checkModalAttempts = 0;
+  private readonly maxModalChecks = 12;
+  private checkModalImageReady = (): void => {
+    this.checkModalAttempts += 1;
+    const el = document.querySelector('.tile-img') as HTMLImageElement | null;
+    if (el) {
+      console.debug('[ricerca-mazze] checkModalImageReady found el', el.src, 'complete=', el.complete, 'nat=', el.naturalWidth, el.naturalHeight);
+      const natW = el.naturalWidth || 0;
+      const natH = el.naturalHeight || 0;
+      if (natW > 0 || natH > 0) {
+        // treat as loaded
+        this.modalLoaded.set(true);
+        this.modalLoadError.set(false);
+        this.modalNaturalWidth.set(natW);
+        this.modalNaturalHeight.set(natH);
+
+        // clamp offsets now that we know sizes
+        const maxX = Math.max(0, natW - 444);
+        const maxY = Math.max(0, natH - 280);
+        const curX = this.modalX();
+        const curY = this.modalY();
+        const clampedX = Math.max(0, Math.min(maxX, curX));
+        const clampedY = Math.max(0, Math.min(maxY, curY));
+        if (clampedX !== curX) this.modalX.set(clampedX);
+        if (clampedY !== curY) this.modalY.set(clampedY);
+        return;
+      }
+
+      if (el.complete && natW === 0 && natH === 0) {
+        // image load finished but no pixels -> error
+        this.modalLoaded.set(false);
+        this.modalLoadError.set(true);
+        return;
+      }
+    }
+
+    if (this.checkModalAttempts < this.maxModalChecks && this.modalOpen()) {
+      setTimeout(this.checkModalImageReady, 200);
+      return;
+    }
+
+    // give up
+    if (!this.modalLoaded()) {
+      this.modalLoadError.set(true);
+      // switch to canvas fallback automatically when polling gives up
+      this.modalUseCanvas.set(true);
+      setTimeout(() => this.renderCanvasCrop(), 60);
+    }
+  };
 }
