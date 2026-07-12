@@ -74,6 +74,14 @@ export class RicercaMazze {
     y: typeof c.y === 'number' ? c.y : 0,
   }));
 
+  // Return only the file name portion of the modal image path (e.g. 'mazze-set-45.png')
+  protected modalImageName(): string {
+    const img = this.modalImage();
+    if (!img) return '';
+    const parts = img.split('/');
+    return parts.length ? parts[parts.length - 1] : img;
+  }
+
   protected readonly foroValues = computed(() => Array.from(
     new Set(this.blades.map((blade) => blade.foroOrAsola).filter((value) => value !== '' && Number.isFinite(Number(value)))),
   ).sort((left, right) => Number(left) - Number(right)));
