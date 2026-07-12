@@ -1,0 +1,171 @@
+<section class="glass-panel rounded-[2rem] border border-white/70 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-6">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-orange-700">Ricerca</p>
+      <h1 class="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl font-serif">Ricerca Mazze</h1>
+      <p class="mt-3 text-sm leading-6 text-slate-600 sm:text-base">
+        {{ sortedBlades().length }} di {{ blades.length }} articoli visualizzati. Scorri orizzontalmente per
+        visualizzare tutte le colonne.
+      </p>
+    </div>
+
+    <a routerLink="/"
+      class="inline-flex shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
+      Torna allo scanner
+    </a>
+  </div>
+
+  <figure class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+    <img ngSrc="/assets/images/mazza.png" width="879" height="373" priority
+      alt="Mazza with dimensional reference drawings for A, B, R and foro"
+      class="mx-auto h-auto w-full max-w-4xl object-contain" />
+  </figure>
+
+  <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5" aria-labelledby="filters-heading">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 id="filters-heading" class="text-base font-semibold text-slate-900">Filtra le mazze</h2>
+        <p class="mt-1 text-sm text-slate-600">Inserisci i valori minimi e massimi desiderati.</p>
+      </div>
+      <button type="button"
+        class="inline-flex cursor-pointer items-center justify-center self-start rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 sm:self-auto"
+        (click)="resetFilters()">
+        Azzera filtri
+      </button>
+    </div>
+
+    <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">A (mm)</legend>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <input #aMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMin()"
+            (input)="aMin.set(aMinInput.value)" aria-label="A minimo in millimetri" placeholder="Min"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          <input #aMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMax()"
+            (input)="aMax.set(aMaxInput.value)" aria-label="A massimo in millimetri" placeholder="Max"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">B (mm)</legend>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <input #bMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMin()"
+            (input)="bMin.set(bMinInput.value)" aria-label="B minimo in millimetri" placeholder="Min"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          <input #bMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMax()"
+            (input)="bMax.set(bMaxInput.value)" aria-label="B massimo in millimetri" placeholder="Max"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">R (mm)</legend>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <input #rMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMin()"
+            (input)="rMin.set(rMinInput.value)" aria-label="R minimo in millimetri" placeholder="Min"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          <input #rMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMax()"
+            (input)="rMax.set(rMaxInput.value)" aria-label="R massimo in millimetri" placeholder="Max"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Peso (kg)</legend>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <input #pesoMinInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMin()"
+            (input)="pesoMin.set(pesoMinInput.value)" aria-label="Peso minimo in chilogrammi" placeholder="Min"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          <input #pesoMaxInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMax()"
+            (input)="pesoMax.set(pesoMaxInput.value)" aria-label="Peso massimo in chilogrammi" placeholder="Max"
+            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+        </div>
+      </fieldset>
+    </div>
+
+    <fieldset class="mt-5">
+      <legend class="text-sm font-semibold text-slate-800">Foro (mm)</legend>
+      <p class="mt-1 text-sm text-slate-600">Seleziona un diametro per filtrare il valore del foro. Lascia senza
+        selezione per includere tutti i valori.</p>
+      <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+        @for (value of foroValues(); track value) {
+        <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+          <input type="radio" name="foro-value" [value]="value" [checked]="foroValue() === value"
+            (change)="foroValue.set(value)" class="h-4 w-4 accent-sky-700" />
+          {{ value }} mm
+        </label>
+        }
+      </div>
+    </fieldset>
+  </section>
+
+  <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white/85">
+    <table class="w-full min-w-[70rem] border-collapse text-left text-sm text-slate-700">
+      <caption class="sr-only">Elenco delle mazze con misure, peso e applicazioni</caption>
+      <thead class="bg-slate-950 text-xs uppercase tracking-wide text-white">
+        <tr>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pageTag')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('pageTag')">Page Tag <span aria-hidden="true">{{ sortIndicator('pageTag')
+                }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('articolo')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('articolo')">Articolo <span aria-hidden="true">{{ sortIndicator('articolo')
+                }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('aMm')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('aMm')">A (mm) <span aria-hidden="true">{{ sortIndicator('aMm') }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('bMm')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('bMm')">B (mm) <span aria-hidden="true">{{ sortIndicator('bMm') }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('foroOrAsola')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('foroOrAsola')">Foro / Asola <span aria-hidden="true">{{ sortIndicator('foroOrAsola')
+                }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('rMm')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('rMm')">R (mm) <span aria-hidden="true">{{ sortIndicator('rMm') }}</span></button>
+          </th>
+          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pesoKg')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('pesoKg')">Peso (kg) <span aria-hidden="true">{{ sortIndicator('pesoKg')
+                }}</span></button>
+          </th>
+          <th scope="col" class="min-w-80 px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('applicazioni')">
+            <button type="button"
+              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+              (click)="sortBy('applicazioni')">Applicazioni <span aria-hidden="true">{{ sortIndicator('applicazioni')
+                }}</span></button>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        @for (blade of sortedBlades(); track blade.articolo + $index) {
+        <tr class="transition hover:bg-sky-50">
+          <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.pageTag || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.articolo || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ blade.aMm || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ blade.bMm || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ blade.foroOrAsola || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ blade.rMm || '—' }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ blade.pesoKg || '—' }}</td>
+          <td class="px-4 py-3 leading-6">{{ blade.applicazioni || '—' }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

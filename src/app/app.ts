@@ -10,6 +10,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { ScanRecord } from './models/scan-record';
 import { OcrResult, OcrService } from './services/ocr.service';
@@ -34,8 +35,8 @@ interface ScanSession {
 }
 
 @Component({
-  selector: 'app-root',
-  imports: [NgOptimizedImage],
+  selector: 'app-scanner-home',
+  imports: [NgOptimizedImage, RouterLink],
   host: {
     class: 'block min-h-screen',
   },
