@@ -154,7 +154,8 @@
       </thead>
       <tbody class="divide-y divide-slate-200">
         @for (blade of sortedBlades(); track blade.articolo + $index) {
-        <tr class="transition hover:bg-sky-50">
+        <tr class="transition hover:bg-sky-50 cursor-pointer" role="button" tabindex="0" (click)="openMazzaImage(blade)"
+          (keydown.enter)="openMazzaImage(blade)">
           <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.pageTag || '—' }}</td>
           <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.articolo || '—' }}</td>
           <td class="whitespace-nowrap px-4 py-3">{{ blade.aMm || '—' }}</td>
@@ -168,4 +169,18 @@
       </tbody>
     </table>
   </div>
+
+  @if (modalOpen()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70" role="dialog" aria-modal="true"
+    (click)="closeMazzaImage()" (keydown.escape)="closeMazzaImage()">
+    <div class="relative max-w-[90vw] max-h-[90vh] p-4" (click)="$event.stopPropagation()">
+      <button type="button"
+        class="absolute right-2 top-2 z-10 inline-flex items-center justify-center rounded-full bg-white/20 p-2 text-white hover:bg-white/30"
+        (click)="closeMazzaImage()" aria-label="Chiudi immagine">✕</button>
+      <img [ngSrc]="modalImage()" width="1200" height="800" alt="Immagine mazze"
+        class="max-h-[80vh] w-auto rounded-md object-contain" />
+    </div>
+  </div>
+  }
+
 </section>

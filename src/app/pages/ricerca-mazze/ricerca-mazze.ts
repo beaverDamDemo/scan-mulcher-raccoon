@@ -34,6 +34,8 @@ export class RicercaMazze {
   protected readonly pesoMin = signal('0.20');
   protected readonly pesoMax = signal('2.70');
   protected readonly foroValue = signal('');
+  protected readonly modalOpen = signal(false);
+  protected readonly modalImage = signal('');
   protected readonly blades: readonly BladeRecord[] = [
     { pageTag: '48/03', articolo: '56194', aMm: '60', bMm: '70', foroOrAsola: '30.5', rMm: '80', pesoKg: '1.50', applicazioni: 'SEPPI; FAE; BERTI; ORSI; AGRIMASTER; PICURSA' },
     { pageTag: '48/03', articolo: '56808', aMm: '60', bMm: '70', foroOrAsola: '31', rMm: '78', pesoKg: '1.53', applicazioni: 'SEPPI' },
@@ -171,23 +173,55 @@ export class RicercaMazze {
   }
 
   private matchesRange(value: string, minimum: string, maximum: string): boolean {
+    // If the field is blank/unknown, include the record (don't exclude it by range filters).
+    if (value === '' || value == null) {
+      return true;
+    }
+
     if (!minimum && !maximum) {
       return true;
     }
 
     const numericValue = Number(value);
 
+    // If the value is not a finite number, treat it as unknown and include it.
     if (!Number.isFinite(numericValue)) {
-      return false;
+      return true;
     }
 
-    const numericMinimum = minimum === '' ? Number.NEGATIVE_INFINITY : Number(minimum);
-    const numericMaximum = maximum === '' ? Number.POSITIVE_INFINITY : Number(maximum);
+    const numericMinimum = minimum === '' || minimum == null ? Number.NEGATIVE_INFINITY : Number(minimum);
+    const numericMaximum = maximum === '' || maximum == null ? Number.POSITIVE_INFINITY : Number(maximum);
 
     return numericValue >= numericMinimum && numericValue <= numericMaximum;
   }
 
   private matchesForoValue(value: string): boolean {
     return !this.foroValue() || value === this.foroValue();
+  }
+
+  protected openMazzaImage(blade: BladeRecord): void {
+    // Determine the absolute index of the blade within the master blades array.
+    let index = this.blades.indexOf(blade);
+
+    // If the blade isn't found (shouldn't happen), try to find it by articolo.
+    if (index === -1) {
+      index = this.blades.findIndex((b) => b.articolo && b.articolo === blade.articolo);
+    }
+
+    // Default to first image if still not found.
+    if (index === -1) {
+      index = 0;
+    }
+
+    const page = Math.floor(index / 16);
+    const imagePath = `/assets/images/mazze-set-${page}.png`;
+
+    this.modalImage.set(imagePath);
+    this.modalOpen.set(true);
+  }
+
+  protected closeMazzaImage(): void {
+    this.modalOpen.set(false);
+    this.modalImage.set('');
   }
 }
