@@ -198,6 +198,13 @@
             <button type="button" class="rounded bg-slate-100 px-2 py-1 text-xs" (click)="toggleCanvasView()">
               @if (!modalUseCanvas()) { Mostra con Canvas } @if (modalUseCanvas()) { Mostra immagine }
             </button>
+            @if (modalArticolo()) {
+            <a href="https://cermag.com/ordini/articolo/{{ modalArticolo() }}" target="_blank" rel="noopener noreferrer"
+              class="rounded bg-sky-700 px-2 py-1 text-xs font-semibold text-white hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              aria-label="View on Cermag mazza {{ modalArticolo() }}" (click)="$event.stopPropagation()">
+              View on Cermag
+            </a>
+            }
           </div>
           @if (!modalLoaded() && !modalLoadError()) {
           <div>Loading...</div>

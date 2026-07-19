@@ -51,6 +51,7 @@ export class RicercaMazze {
   protected readonly modalNaturalHeight = signal(0);
   protected readonly modalUseFallback = signal(false);
   protected readonly modalUseCanvas = signal(false);
+  protected readonly modalArticolo = signal('');
   // Use `masterData` as the single source of truth for blades and coordinates.
   protected readonly blades: readonly BladeRecord[] = (masterData as Array<any>).map((c: any, i: number) => ({
     pageTag: c.pageTag || ((): string => {
@@ -214,6 +215,7 @@ export class RicercaMazze {
       this.modalX.set(coord.x || 0);
       this.modalY.set(coord.y || 0);
       this.modalLabel.set(`${blade.articolo || '—'} (${index})`);
+      this.modalArticolo.set(blade.articolo || '');
 
       this.modalLoaded.set(false);
       this.modalLoadError.set(false);
@@ -227,6 +229,7 @@ export class RicercaMazze {
       this.modalRow.set(Math.max(0, Math.min(3, row)));
     } else {
       this.modalLabel.set(`${blade.articolo || '—'} (${index})`);
+      this.modalArticolo.set(blade.articolo || '');
       this.modalLoaded.set(false);
       this.modalLoadError.set(false);
       this.modalNaturalWidth.set(0);
@@ -281,6 +284,7 @@ export class RicercaMazze {
   protected closeMazzaImage(): void {
     this.modalOpen.set(false);
     this.modalImage.set('');
+    this.modalArticolo.set('');
     // Restore previous focus when modal closes.
     try {
       if (this.previousActiveElement instanceof HTMLElement) {
