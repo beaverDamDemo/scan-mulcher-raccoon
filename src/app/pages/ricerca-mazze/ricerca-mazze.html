@@ -1,12 +1,209 @@
 <section class="glass-panel rounded-[2rem] border border-white/70 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-6">
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-    <div>
-      <h1 class="text-lg font-semibold text-slate-900">Ricerca mazze</h1>
-      <a routerLink="/scanner"
-        class="mt-1 inline-flex cursor-pointer items-center justify-center self-start rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 sm:self-auto"
-        aria-label="Torna allo scanner">Torna allo scanner</a>
+  <app-page-header [title]="'Ricerca mazze'" [backLink]="'/'"></app-page-header>
+
+  <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5"
+    aria-labelledby="dropbox-links-heading">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 id="dropbox-links-heading" class="text-base font-semibold text-slate-900">Immagini Dropbox</h2>
+        <p class="mt-1 text-sm text-slate-600">Incolla i link Dropbox per le immagini dei set 44, 45 e 46. Vengono
+          salvati solo nel browser.</p>
+      </div>
     </div>
-  </div>
+
+    <div class="mt-5 flex flex-col gap-4">
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 44</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze44Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('44')" (input)="onMazzeLinkInput('44', mazze44Input.value)"
+            aria-label="Link Dropbox immagine mazze set 44"
+            placeholder="https://www.dropbox.com/.../mazze-set-44.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              (click)="saveMazzeLink('44')">Salva</button>
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              [disabled]="!mazzeLinkDraftValue('44')" (click)="clearMazzeLink('44')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 45</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze45Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('45')" (input)="onMazzeLinkInput('45', mazze45Input.value)"
+            aria-label="Link Dropbox immagine mazze set 45"
+            placeholder="https://www.dropbox.com/.../mazze-set-45.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              (click)="saveMazzeLink('45')">Salva</button>
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              [disabled]="!mazzeLinkDraftValue('45')" (click)="clearMazzeLink('45')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 46</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze46Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('46')" (input)="onMazzeLinkInput('46', mazze46Input.value)"
+            aria-label="Link Dropbox immagine mazze set 46"
+            placeholder="https://www.dropbox.com/.../mazze-set-46.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              (click)="saveMazzeLink('46')">Salva</button>
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+              [disabled]="!mazzeLinkDraftValue('46')" (click)="clearMazzeLink('46')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Additional sets 47..52 and 52a -->
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 47</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze47Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('47')" (input)="onMazzeLinkInput('47', mazze47Input.value)"
+            aria-label="Link Dropbox immagine mazze set 47"
+            placeholder="https://www.dropbox.com/.../mazze-set-47.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800"
+              (click)="saveMazzeLink('47')">Salva</button>
+            <button type="button"
+              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+              [disabled]="!mazzeLinkDraftValue('47')" (click)="clearMazzeLink('47')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 48</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze48Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('48')" (input)="onMazzeLinkInput('48', mazze48Input.value)"
+            aria-label="Link Dropbox immagine mazze set 48"
+            placeholder="https://www.dropbox.com/.../mazze-set-48.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('48')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('48')" (click)="clearMazzeLink('48')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 49</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze49Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('49')" (input)="onMazzeLinkInput('49', mazze49Input.value)"
+            aria-label="Link Dropbox immagine mazze set 49"
+            placeholder="https://www.dropbox.com/.../mazze-set-49.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('49')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('49')" (click)="clearMazzeLink('49')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 50</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze50Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('50')" (input)="onMazzeLinkInput('50', mazze50Input.value)"
+            aria-label="Link Dropbox immagine mazze set 50"
+            placeholder="https://www.dropbox.com/.../mazze-set-50.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('50')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('50')" (click)="clearMazzeLink('50')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 51</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze51Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('51')" (input)="onMazzeLinkInput('51', mazze51Input.value)"
+            aria-label="Link Dropbox immagine mazze set 51"
+            placeholder="https://www.dropbox.com/.../mazze-set-51.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('51')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('51')" (click)="clearMazzeLink('51')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze52Input type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('52')" (input)="onMazzeLinkInput('52', mazze52Input.value)"
+            aria-label="Link Dropbox immagine mazze set 52"
+            placeholder="https://www.dropbox.com/.../mazze-set-52.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('52')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('52')" (click)="clearMazzeLink('52')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="min-w-0">
+        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52a</legend>
+        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+          <input #mazze52aInput type="url" autocomplete="off" spellcheck="false"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+            [value]="mazzeLinkDraftValue('52a')" (input)="onMazzeLinkInput('52a', mazze52aInput.value)"
+            aria-label="Link Dropbox immagine mazze set 52a"
+            placeholder="https://www.dropbox.com/.../mazze-set-52a.png" />
+          <div class="flex gap-2">
+            <button type="button"
+              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+              (click)="saveMazzeLink('52a')">Salva</button>
+            <button type="button"
+              class="inline-flex rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+              [disabled]="!mazzeLinkDraftValue('52a')" (click)="clearMazzeLink('52a')">Cancella</button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </section>
 
   <figure class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
     <img ngSrc="/assets/images/mazza.png" width="879" height="373" priority
@@ -168,7 +365,7 @@
     aria-modal="true" (click)="closeMazzaImage()" (keydown.escape)="closeMazzaImage()" tabindex="0">
     <div class="relative max-w-[90vw] max-h-[90vh] p-4" (click)="$event.stopPropagation()">
       <button type="button"
-        class="absolute right-2 top-2 z-10 inline-flex items-center justify-center rounded-full bg-white/20 p-2 text-white hover:bg-white/30"
+        class="absolute right-2 top-2 z-50 inline-flex items-center justify-center rounded-full bg-white/80 p-2 text-slate-900 hover:bg-white/95 shadow-lg"
         (click)="closeMazzaImage()" aria-label="Chiudi immagine">✕</button>
       <div class="tile-viewport mx-auto">
         @if (!modalUseCanvas()) {

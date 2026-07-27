@@ -1,7 +1,46 @@
-import { NgOptimizedImage } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
+import { Component, PLATFORM_ID, computed, inject, signal, Signal, WritableSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PageHeader } from '../../components/page-header/page-header';
 import masterData from './mazze-master.json';
+
+// Supported Dropbox set IDs (44..52 and 52a)
+const SUPPORTED_DROPBOX_SET_IDS = ['44', '45', '46', '47', '48', '49', '50', '51', '52', '52a'] as const;
+
+// Defaults can be provided here per-set if available; otherwise leave empty string.
+const DEFAULT_DROPBOX_LINKS: Record<string, string> = {
+  '44': 'https://www.dropbox.com/scl/fi/90ta6toz9hcygg6axkkxl/mazze-set-44.png?rlkey=cczqu75ey7avrweyjrura70u3&st=i5zfj90e&dl=0',
+  '45': 'https://www.dropbox.com/scl/fi/piodwq6wokb92fzcmly70/mazze-set-45.png?rlkey=gfavava836qfwnh466sb3mu8y&st=9opm3b61&dl=0',
+  '46': '',
+  '47': '',
+  '48': '',
+  '49': '',
+  '50': '',
+  '51': '',
+  '52': '',
+  '52a': '',
+};
+
+function convertDropboxShareUrlToDirect(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+
+    if (parsed.hostname === 'www.dropbox.com' || parsed.hostname === 'dropbox.com') {
+      parsed.searchParams.set('raw', '1');
+      parsed.searchParams.delete('dl');
+      return parsed.toString();
+    }
+  } catch {
+    // Not a valid URL; return as-is and let the browser attempt to load it.
+  }
+
+  return trimmed;
+}
 
 interface BladeRecord {
   pageTag: string;
@@ -20,11 +59,30 @@ type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-ricerca-mazze',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, PageHeader],
   templateUrl: './ricerca-mazze.html',
   styleUrl: './ricerca-mazze.css',
 })
 export class RicercaMazze {
+  private readonly platformId = inject(PLATFORM_ID);
+  constructor() {
+    // initialize dynamic link drafts and computed direct links for supported sets
+    for (const id of this.mazzeSetIds) {
+      const key = `scan-mulcher-mazze-${id}-link`;
+      const defaultValue = DEFAULT_DROPBOX_LINKS[id] ?? '';
+      const draft = signal<string>(this.readMazzeLink(key, defaultValue));
+      this.mazzeLinkDrafts.set(id, draft);
+      this.mazzeLinks.set(id, computed<string>(() => {
+        const direct = convertDropboxShareUrlToDirect(draft());
+        return this.maybeProxyDropbox(direct);
+      }));
+    }
+    // Preload configured Dropbox images on page load (browser only)
+    if (isPlatformBrowser(this.platformId)) {
+      // schedule async so constructor finishes quickly
+      setTimeout(() => this.preloadDropboxImages(), 0);
+    }
+  }
   private previousActiveElement: Element | null = null;
   // Default to the original CSV order by sorting on the numeric `index`.
   protected readonly sortColumn = signal<BladeSortColumn>('index');
@@ -52,6 +110,10 @@ export class RicercaMazze {
   protected readonly modalUseFallback = signal(false);
   protected readonly modalUseCanvas = signal(false);
   protected readonly modalArticolo = signal('');
+  // Dynamic collections of signals for supported sets.
+  protected readonly mazzeSetIds = SUPPORTED_DROPBOX_SET_IDS;
+  protected readonly mazzeLinkDrafts = new Map<string, WritableSignal<string>>();
+  protected readonly mazzeLinks = new Map<string, Signal<string>>();
   // Use `masterData` as the single source of truth for blades and coordinates.
   protected readonly blades: readonly BladeRecord[] = (masterData as Array<any>).map((c: any, i: number) => ({
     pageTag: c.pageTag || ((): string => {
@@ -203,7 +265,7 @@ export class RicercaMazze {
     }
 
     const page = Math.floor(index / 16);
-    const imagePath = `/assets/images/mazze-set-${page}.png`;
+    const imagePath = this.resolveMazzeImageUrl(`/assets/images/mazze-set-${page}.png`);
 
     const indexWithinSet = index % 16;
 
@@ -211,7 +273,7 @@ export class RicercaMazze {
     const coord = (this.coordinates as Array<{ image: string; x: number; y: number; }>)[index];
 
     if (coord) {
-      this.modalImage.set(coord.image || imagePath);
+      this.modalImage.set(this.resolveMazzeImageUrl(coord.image || imagePath));
       this.modalX.set(coord.x || 0);
       this.modalY.set(coord.y || 0);
       this.modalLabel.set(`${blade.articolo || '—'} (${index})`);
@@ -432,4 +494,110 @@ export class RicercaMazze {
       setTimeout(() => this.renderCanvasCrop(), 60);
     }
   };
+
+  protected onMazzeLinkInput(setNumber: string | number, value: string): void {
+    const id = String(setNumber);
+    const draft = this.mazzeLinkDrafts.get(id);
+    if (draft) draft.set(value);
+  }
+
+  protected saveMazzeLink(setNumber: string | number): void {
+    const id = String(setNumber);
+    const key = `scan-mulcher-mazze-${id}-link`;
+    const draft = this.mazzeLinkDrafts.get(id);
+    const value = draft ? draft() : '';
+    const normalized = value.trim();
+
+    if (isPlatformBrowser(this.platformId)) {
+      if (normalized) {
+        window.localStorage.setItem(key, normalized);
+      } else {
+        window.localStorage.removeItem(key);
+      }
+    }
+
+    if (draft) draft.set(normalized);
+  }
+
+  protected clearMazzeLink(setNumber: string | number): void {
+    const id = String(setNumber);
+    const key = `scan-mulcher-mazze-${id}-link`;
+    if (isPlatformBrowser(this.platformId)) {
+      window.localStorage.removeItem(key);
+    }
+    const draft = this.mazzeLinkDrafts.get(id);
+    if (draft) draft.set('');
+  }
+
+  // Helper for templates to read the current draft value for a given set id.
+  protected mazzeLinkDraftValue(id: string): string {
+    const d = this.mazzeLinkDrafts.get(String(id));
+    return d ? d() : '';
+  }
+
+  // Cache of preloaded Image objects by set id.
+  protected readonly preloadedImages = new Map<string, HTMLImageElement>();
+
+  // Preload all configured Dropbox images so they are available when the user opens a modal.
+  private preloadDropboxImages(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    for (const id of this.mazzeSetIds) {
+      const comp = this.mazzeLinks.get(id);
+      if (!comp) continue;
+      const url = comp();
+      if (!url) continue;
+
+      // If already preloaded, skip
+      if (this.preloadedImages.has(id)) continue;
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.decoding = 'async';
+      img.onload = () => console.debug('[ricerca-mazze] preloaded', id, url, img.naturalWidth, img.naturalHeight);
+      img.onerror = (e) => console.debug('[ricerca-mazze] preload error', id, url, e);
+      // Trigger load
+      img.src = url;
+      this.preloadedImages.set(id, img);
+    }
+  }
+
+  // If the URL points to Dropbox, route it through the local proxy so the browser
+  // can load it without CORS failures. In non-browser contexts, return the original URL.
+  private maybeProxyDropbox(url: string): string {
+    if (!url) return url;
+    if (!isPlatformBrowser(this.platformId)) return url;
+
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname.includes('dropbox.com')) {
+        return `/_image_proxy?u=${encodeURIComponent(url)}`;
+      }
+    } catch {
+      // ignore malformed URLs
+    }
+
+    return url;
+  }
+
+  private readMazzeLink(key: string, defaultValue: string): string {
+    if (!isPlatformBrowser(this.platformId)) {
+      return defaultValue;
+    }
+
+    return window.localStorage.getItem(key) ?? defaultValue;
+  }
+
+  private resolveMazzeImageUrl(localPath: string): string {
+    const match = /mazze-set-([0-9]+a?)\.png$/i.exec(localPath);
+    if (!match) return localPath;
+
+    const id = match[1];
+    const computedLink = this.mazzeLinks.get(id);
+    if (computedLink) {
+      return (computedLink() as string) || localPath;
+    }
+
+    return localPath;
+  }
+
 }

@@ -13,4 +13,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/ricerca-mazze/ricerca-mazze').then((module) => module.RicercaMazze),
   },
+  {
+    path: 'ricerca-pezzi-di-ricambio',
+    loadComponent: () =>
+      import('./pages/ricerca-pezzi-di-ricambio/ricerca-pezzi-di-ricambio').then((module) => module.RicercaPezziDiRicambio),
+  },
 ];

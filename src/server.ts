@@ -37,6 +37,32 @@ app.use(
   }),
 );
 
+// Simple image proxy to bypass CORS for third-party hosts (used for Dropbox images).
+// Exposes: GET /_image_proxy?u=<encodedUrl>
+app.get('/_image_proxy', async (req: express.Request, res: express.Response) => {
+  const url = String((req.query && req.query['u']) || '');
+  if (!url) {
+    res.status(400).send('missing url');
+    return;
+  }
+
+  try {
+    const upstream = await fetch(url);
+    const arrayBuffer = await upstream.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const contentType = upstream.headers.get('content-type') || 'application/octet-stream';
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.setHeader('Content-Type', contentType);
+    res.status(upstream.status).send(buffer);
+    return;
+  } catch (err) {
+    console.error('image proxy error', err);
+    res.status(502).send('proxy error');
+    return;
+  }
+});
+
 /**
  * Handle all other requests by rendering the Angular application.
  */
