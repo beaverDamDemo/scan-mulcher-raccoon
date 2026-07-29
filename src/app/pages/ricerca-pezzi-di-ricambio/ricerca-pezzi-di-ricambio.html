@@ -10,6 +10,31 @@
       <p class="mt-3 text-sm text-slate-700">Hai inserito: <strong>{{ debouncedQuery() }}</strong></p>
     </div>
 
+    <div class="mt-6">
+      <label class="block mb-2 font-medium">Inserisci URL (max 6)</label>
+      <div class="space-y-2">
+        @for (url of urls(); track $index; let i = $index) {
+        <div class="flex gap-2">
+          <label class="sr-only">URL {{ i + 1 }}</label>
+          <input type="url" [value]="url" placeholder="https://example.com/sample{{ i + 1 }}"
+            class="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+            (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
+          <button type="button"
+            class="rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+            [disabled]="url.trim() === ''" [attr.aria-label]="'Cancella URL ' + (i + 1)"
+            (click)="clearUrl(i)">Cancella</button>
+        </div>
+        }
+      </div>
+
+      <button type="button"
+        class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
+        (click)="onCerca()">Cerca</button>
+
+      <p class="mt-3 text-sm text-slate-700">URL inseriti: <strong>{{ enteredUrls().length ? enteredUrls().join(', ') :
+          '—' }}</strong></p>
+    </div>
+
     <p class="mt-3 text-sm text-slate-600">Questa è una pagina di esempio per la ricerca dei pezzi di ricambio.
       Contenuto verrà aggiunto qui.</p>
   </div>

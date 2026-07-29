@@ -1,6 +1,5 @@
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { Component, PLATFORM_ID, computed, inject, signal, Signal, WritableSignal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { PageHeader } from '../../components/page-header/page-header';
 import masterData from './mazze-master.json';
 
@@ -59,7 +58,7 @@ type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-ricerca-mazze',
-  imports: [NgOptimizedImage, RouterLink, PageHeader],
+  imports: [NgOptimizedImage, PageHeader],
   templateUrl: './ricerca-mazze.html',
   styleUrl: './ricerca-mazze.css',
 })

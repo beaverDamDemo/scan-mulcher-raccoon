@@ -8,6 +8,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './page-header.css',
 })
 export class PageHeader {
-  protected readonly title = input<string>('');
-  protected readonly backLink = input<string>('/');
+  readonly title = input<string>('');
+  readonly backLink = input<string>('/');
 }
