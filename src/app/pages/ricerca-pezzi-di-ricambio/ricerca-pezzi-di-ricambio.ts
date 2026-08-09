@@ -18,7 +18,10 @@ export class RicercaPezziDiRicambio {
   protected readonly urls = signal<string[]>([
     'https://www.ceneje.si/Iskanje/Izdelki?q=duraturn+2056016',
     'https://www.mimovrste.com/iskanje?src=sug&s=Duraturn%20205%2F60%20R16',
-    '',
+    'https://www.merkur.si/catalogsearch/result/index/?q=2056016',
+    'https://www.bolha.com/iskanje?q=duraturn+2056016',
+    'https://www.bigbang.si/izdelki/?search_q=2056016',
+    'https://www.shoppster.si/search/20056016',
   ]);
   protected readonly enteredUrls = computed(() => this.urls().filter(u => u.trim() !== ''));
   protected readonly previewUrls = signal<string[]>([]);
@@ -72,7 +75,29 @@ export class RicercaPezziDiRicambio {
   }
 
   onCerca(): void {
-    this.previewUrls.set(this.enteredUrls().filter(url => this.isPreviewableUrl(url)));
+    const urls = this.enteredUrls().filter(url => this.isPreviewableUrl(url));
+    this.previewUrls.set(urls);
+
+    if (isPlatformBrowser(this.platformId) && urls.length > 0) {
+      try {
+        // Create and click anchor elements synchronously so each click is treated
+        // as part of the original user gesture. This increases the likelihood
+        // that browsers will open multiple tabs instead of blocking them.
+        for (const url of urls) {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          // Some browsers require the element to be in the document to trigger a navigation
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      } catch (e) {
+        // ignore failures to open tabs (popup blockers)
+      }
+    }
   }
 
   private maybeAppendInput(index: number): void {
