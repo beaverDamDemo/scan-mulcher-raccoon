@@ -4,14 +4,34 @@
 
     <div class="mt-4">
       <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
-      <input id="pezzi-query" type="text" placeholder="Inserisci dati per ricerca..."
-        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)" />
+      <input id="pezzi-query" type="text" placeholder="duraturn 2056016"
+        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)"
+        (focus)="onQueryFocus($event)" />
 
-      <p class="mt-3 text-sm text-slate-700">Hai inserito: <strong>{{ debouncedQuery() }}</strong></p>
+      <!-- removed user-typed query display -->
+    </div>
+
+    <div class="mt-4 site-buttons">
+      <button type="button" (click)="onSiteClick('ceneje')" data-site="ceneje" data-initial="C" aria-label="ceneje"
+        class="site-button site-button--ceneje"
+        [class.site-button--active]="activeSite() === 'ceneje'">ceneje.si</button>
+      <button type="button" (click)="onSiteClick('mimovrste')" data-site="mimovrste" data-initial="M"
+        aria-label="mimovrste" class="site-button site-button--mimovrste"
+        [class.site-button--active]="activeSite() === 'mimovrste'">mimovrste</button>
+      <button type="button" (click)="onSiteClick('merkur')" data-site="merkur" data-initial="Me" aria-label="merkur"
+        class="site-button site-button--merkur" [class.site-button--active]="activeSite() === 'merkur'">merkur</button>
+      <button type="button" (click)="onSiteClick('bolha')" data-site="bolha" data-initial="B" aria-label="bolha"
+        class="site-button site-button--bolha" [class.site-button--active]="activeSite() === 'bolha'">bolha.com</button>
+      <button type="button" (click)="onSiteClick('bigbang')" data-site="bigbang" data-initial="BB" aria-label="bigbang"
+        class="site-button site-button--bigbang"
+        [class.site-button--active]="activeSite() === 'bigbang'">bigbang</button>
+      <button type="button" (click)="onSiteClick('shoppster')" data-site="shoppster" data-initial="S"
+        aria-label="shoppster" class="site-button site-button--shoppster"
+        [class.site-button--active]="activeSite() === 'shoppster'">shoppster</button>
     </div>
 
     <div class="mt-6">
-      <label class="block mb-2 font-medium">Inserisci URL (max 6)</label>
+      <label class="block mb-2 font-medium">Populated URLs</label>
       <div class="space-y-2">
         <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
           <label class="sr-only">URL {{ i + 1 }}</label>
@@ -26,23 +46,10 @@
       </div>
 
       <button type="button"
-        class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
+        class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer"
         (click)="onCerca()">Cerca</button>
 
-      <div class="mt-3 text-sm text-slate-700">
-        <div class="font-medium">URL inseriti:</div>
-        <ul class="mt-1 space-y-1">
-          <ng-container *ngIf="enteredUrls().length; else noUrls">
-            <li *ngFor="let url of enteredUrls(); let i = index" class="break-words">
-              <a class="text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
-                rel="noopener noreferrer">{{ url }}</a>
-            </li>
-          </ng-container>
-          <ng-template #noUrls>
-            <li>—</li>
-          </ng-template>
-        </ul>
-      </div>
+      <!-- URL list removed as not needed anymore -->
     </div>
 
     <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">

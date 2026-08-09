@@ -1,3 +1,108 @@
 .ricerca-pezzi-di-ricambio-page {
   /* Empty styles for placeholder page */
 }
+
+/* Fancy site buttons */
+.site-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.site-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 0.6rem;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition:
+    box-shadow 120ms ease,
+    opacity 120ms ease,
+    filter 180ms ease;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.site-button::before {
+  content: attr(data-initial);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.site-button:hover {
+  /* No scaling; subtle brightness and layered shadow for hover */
+  filter: brightness(1.06);
+  box-shadow:
+    0 14px 36px rgba(2, 6, 23, 0.12),
+    inset 0 -6px 16px rgba(0, 0, 0, 0.06);
+}
+.site-button:active {
+  /* Slightly dim when actively pressed, no transform */
+  filter: brightness(0.98);
+}
+.site-button:focus-visible {
+  outline: 3px solid rgba(0, 0, 0, 0.08);
+  outline-offset: 3px;
+}
+
+/* Persistent "pressed" look when a site is active (toggled) */
+.site-button--active {
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 -8px 22px rgba(0, 0, 0, 0.24),
+    0 10px 28px rgba(2, 6, 23, 0.12);
+  filter: brightness(1.04);
+  z-index: 1;
+}
+
+.site-button--active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  mix-blend-mode: overlay;
+}
+
+/* Brand-ish modifier gradients */
+.site-button--ceneje {
+  background: linear-gradient(90deg, #0f172a, #2563eb);
+}
+.site-button--mimovrste {
+  background: linear-gradient(90deg, #f97316, #fb923c);
+}
+.site-button--merkur {
+  background: linear-gradient(90deg, #dc2626, #fb7185);
+}
+.site-button--bolha {
+  background: linear-gradient(90deg, #059669, #10b981);
+}
+.site-button--bigbang {
+  background: linear-gradient(90deg, #6d28d9, #c084fc);
+}
+.site-button--shoppster {
+  background: linear-gradient(90deg, #0ea5a4, #34d399);
+}
+
+.site-button[disabled],
+.site-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
