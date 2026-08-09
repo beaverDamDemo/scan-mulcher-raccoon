@@ -26,6 +26,15 @@ body {
   background-size: cover;
 }
 
+/* Keep panels and controls compact; circular status indicators remain circular. */
+[class*='rounded-'] {
+  border-radius: 0.5rem;
+}
+
+[class*='rounded-full'] {
+  border-radius: 9999px;
+}
+
 /* Warning styles for enabled 'Cancella' buttons */
 button.btn-cancella:not([disabled]) {
   background-color: #fff7ed !important; /* very light warning */

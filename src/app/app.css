@@ -92,7 +92,7 @@
 }
 
 .scan-shell [class*='rounded-'] {
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .scan-shell [class*='rounded-full'] {

@@ -1,70 +1,73 @@
 <section class="ricerca-pezzi-di-ricambio-page">
-  <div class="mx-auto max-w-4xl p-6">
-    <app-page-header [title]="'Ricerca Pezzi di Ricambio'" [backLink]="'/'"></app-page-header>
+  <app-page-header [title]="'Ricerca Pezzi di Ricambio'" [backLink]="'/'"></app-page-header>
 
-    <div class="mt-4">
-      <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
-      <input id="pezzi-query" type="text" placeholder="duraturn 2056016"
-        class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)"
-        (focus)="onQueryFocus($event)" />
+  <div class="ricerca-pezzi-di-ricambio-page__content">
+    <section class="ricerca-pezzi-di-ricambio-page__panel" aria-label="Ricerca pezzi di ricambio">
 
-      <!-- removed user-typed query display -->
-    </div>
+      <div class="mt-4">
+        <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
+        <input id="pezzi-query" type="text" placeholder="duraturn 2056016"
+          class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)"
+          (focus)="onQueryFocus($event)" />
 
-    <div class="mt-4 site-buttons">
-      <button type="button" (click)="onSiteClick('ceneje')" data-site="ceneje" data-initial="C" aria-label="ceneje"
-        class="site-button site-button--ceneje"
-        [class.site-button--active]="activeSite() === 'ceneje'">ceneje.si</button>
-      <button type="button" (click)="onSiteClick('mimovrste')" data-site="mimovrste" data-initial="M"
-        aria-label="mimovrste" class="site-button site-button--mimovrste"
-        [class.site-button--active]="activeSite() === 'mimovrste'">mimovrste</button>
-      <button type="button" (click)="onSiteClick('merkur')" data-site="merkur" data-initial="Me" aria-label="merkur"
-        class="site-button site-button--merkur" [class.site-button--active]="activeSite() === 'merkur'">merkur</button>
-      <button type="button" (click)="onSiteClick('bolha')" data-site="bolha" data-initial="B" aria-label="bolha"
-        class="site-button site-button--bolha" [class.site-button--active]="activeSite() === 'bolha'">bolha.com</button>
-      <button type="button" (click)="onSiteClick('bigbang')" data-site="bigbang" data-initial="BB" aria-label="bigbang"
-        class="site-button site-button--bigbang"
-        [class.site-button--active]="activeSite() === 'bigbang'">bigbang</button>
-      <button type="button" (click)="onSiteClick('shoppster')" data-site="shoppster" data-initial="S"
-        aria-label="shoppster" class="site-button site-button--shoppster"
-        [class.site-button--active]="activeSite() === 'shoppster'">shoppster</button>
-    </div>
+        <!-- removed user-typed query display -->
+      </div>
 
-    <div class="mt-6">
-      <label class="block mb-2 font-medium">Populated URLs</label>
-      <div class="space-y-2">
-        <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
-          <label class="sr-only">URL {{ i + 1 }}</label>
-          <input type="url" [value]="url" placeholder="https://example.com/sample{{ i + 1 }}"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
-            (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
-          <button type="button"
-            class="rounded-xl btn-cancella border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-            [disabled]="url.trim() === ''" [attr.aria-label]="'Cancella URL ' + (i + 1)"
-            (click)="clearUrl(i)">Cancella</button>
+      <div class="mt-4 site-buttons">
+        <button type="button" (click)="onSiteClick('ceneje')" data-site="ceneje" data-initial="C" aria-label="ceneje"
+          class="site-button site-button--ceneje"
+          [class.site-button--active]="activeSite() === 'ceneje'">ceneje.si</button>
+        <button type="button" (click)="onSiteClick('mimovrste')" data-site="mimovrste" data-initial="M"
+          aria-label="mimovrste" class="site-button site-button--mimovrste"
+          [class.site-button--active]="activeSite() === 'mimovrste'">mimovrste</button>
+        <button type="button" (click)="onSiteClick('merkur')" data-site="merkur" data-initial="Me" aria-label="merkur"
+          class="site-button site-button--merkur"
+          [class.site-button--active]="activeSite() === 'merkur'">merkur</button>
+        <button type="button" (click)="onSiteClick('bolha')" data-site="bolha" data-initial="B" aria-label="bolha"
+          class="site-button site-button--bolha"
+          [class.site-button--active]="activeSite() === 'bolha'">bolha.com</button>
+        <button type="button" (click)="onSiteClick('bigbang')" data-site="bigbang" data-initial="BB"
+          aria-label="bigbang" class="site-button site-button--bigbang"
+          [class.site-button--active]="activeSite() === 'bigbang'">bigbang</button>
+        <button type="button" (click)="onSiteClick('shoppster')" data-site="shoppster" data-initial="S"
+          aria-label="shoppster" class="site-button site-button--shoppster"
+          [class.site-button--active]="activeSite() === 'shoppster'">shoppster</button>
+      </div>
+
+      <div class="mt-6">
+        <label class="block mb-2 font-medium">Populated URLs</label>
+        <div class="space-y-2">
+          <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
+            <label class="sr-only">URL {{ i + 1 }}</label>
+            <input type="url" [value]="url" placeholder="https://example.com/sample{{ i + 1 }}"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+              (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
+            <button type="button"
+              class="rounded-xl btn-cancella border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="url.trim() === ''" [attr.aria-label]="'Cancella URL ' + (i + 1)"
+              (click)="clearUrl(i)">Cancella</button>
+          </div>
         </div>
+
+        <button type="button"
+          class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer"
+          (click)="onCerca()">Cerca</button>
+
+        <!-- URL list removed as not needed anymore -->
       </div>
 
-      <button type="button"
-        class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer"
-        (click)="onCerca()">Cerca</button>
+      <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
+        <h2 id="anteprime-title" class="text-lg font-semibold text-slate-900">Anteprime siti</h2>
+        <div class="mt-3 space-y-6">
+          <article *ngFor="let url of previewUrls(); let i = index">
+            <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
+              rel="noopener noreferrer">{{ url }}</a>
+            <iframe class="mt-2 h-96 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
+              loading="lazy" referrerpolicy="no-referrer"></iframe>
+          </article>
+        </div>
+      </section>
 
-      <!-- URL list removed as not needed anymore -->
-    </div>
-
-    <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
-      <h2 id="anteprime-title" class="text-lg font-semibold text-slate-900">Anteprime siti</h2>
-      <div class="mt-3 space-y-6">
-        <article *ngFor="let url of previewUrls(); let i = index">
-          <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
-            rel="noopener noreferrer">{{ url }}</a>
-          <iframe class="mt-2 h-96 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
-            loading="lazy" referrerpolicy="no-referrer"></iframe>
-        </article>
-      </div>
     </section>
-
-    <p class="mt-3 text-sm text-slate-600">Questa è una pagina di esempio per la ricerca dei pezzi di ricambio.
-      Contenuto verrà aggiunto qui.</p>
   </div>
 </section>

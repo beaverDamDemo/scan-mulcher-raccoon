@@ -1,425 +1,430 @@
-<section class="glass-panel rounded-[2rem] border border-white/70 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)] sm:p-6">
+<section
+  class="glass-panel overflow-hidden rounded-[2rem] border border-white/70 shadow-[0_20px_80px_rgba(15,23,42,0.08)]">
   <app-page-header [title]="'Ricerca mazze'" [backLink]="'/'"></app-page-header>
 
-  <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5"
-    aria-labelledby="dropbox-links-heading">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 id="dropbox-links-heading" class="text-base font-semibold text-slate-900">Immagini Dropbox</h2>
-        <p class="mt-1 text-sm text-slate-600">Incolla i link Dropbox per le immagini dei set 44, 45 e 46. I link
-          vengono memorizzati solo nel browser (localStorage).</p>
+  <div class="p-5 sm:p-6">
+    <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5"
+      aria-labelledby="dropbox-links-heading">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 id="dropbox-links-heading" class="text-base font-semibold text-slate-900">Immagini Dropbox</h2>
+          <p class="mt-1 text-sm text-slate-600">Incolla i link Dropbox per le immagini dei set 44, 45 e 46. I link
+            vengono memorizzati solo nel browser (localStorage).</p>
+        </div>
       </div>
-    </div>
 
-    <div class="mt-5 flex flex-col gap-4">
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 44</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze44Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('44')" (input)="onMazzeLinkInput('44', mazze44Input.value)"
-            aria-label="Link Dropbox immagine mazze set 44"
-            placeholder="https://www.dropbox.com/.../mazze-set-44.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              (click)="saveMazzeLink('44')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              [disabled]="!canClearMazzeLink('44')" (click)="clearMazzeLink('44')">Cancella</button>
+      <div class="mt-5 flex flex-col gap-4">
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 44</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze44Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('44')" (input)="onMazzeLinkInput('44', mazze44Input.value)"
+              aria-label="Link Dropbox immagine mazze set 44"
+              placeholder="https://www.dropbox.com/.../mazze-set-44.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                (click)="saveMazzeLink('44')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                [disabled]="!canClearMazzeLink('44')" (click)="clearMazzeLink('44')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 45</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze45Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('45')" (input)="onMazzeLinkInput('45', mazze45Input.value)"
-            aria-label="Link Dropbox immagine mazze set 45"
-            placeholder="https://www.dropbox.com/.../mazze-set-45.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              (click)="saveMazzeLink('45')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              [disabled]="!canClearMazzeLink('45')" (click)="clearMazzeLink('45')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 45</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze45Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('45')" (input)="onMazzeLinkInput('45', mazze45Input.value)"
+              aria-label="Link Dropbox immagine mazze set 45"
+              placeholder="https://www.dropbox.com/.../mazze-set-45.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                (click)="saveMazzeLink('45')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                [disabled]="!canClearMazzeLink('45')" (click)="clearMazzeLink('45')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 46</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze46Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('46')" (input)="onMazzeLinkInput('46', mazze46Input.value)"
-            aria-label="Link Dropbox immagine mazze set 46"
-            placeholder="https://www.dropbox.com/.../mazze-set-46.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              (click)="saveMazzeLink('46')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-              [disabled]="!canClearMazzeLink('46')" (click)="clearMazzeLink('46')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 46</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze46Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('46')" (input)="onMazzeLinkInput('46', mazze46Input.value)"
+              aria-label="Link Dropbox immagine mazze set 46"
+              placeholder="https://www.dropbox.com/.../mazze-set-46.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                (click)="saveMazzeLink('46')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
+                [disabled]="!canClearMazzeLink('46')" (click)="clearMazzeLink('46')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <!-- Additional sets 47..52 and 52a -->
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 47</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze47Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('47')" (input)="onMazzeLinkInput('47', mazze47Input.value)"
-            aria-label="Link Dropbox immagine mazze set 47"
-            placeholder="https://www.dropbox.com/.../mazze-set-47.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800"
-              (click)="saveMazzeLink('47')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
-              [disabled]="!mazzeLinkDraftValue('47')" (click)="clearMazzeLink('47')">Cancella</button>
+        <!-- Additional sets 47..52 and 52a -->
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 47</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze47Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('47')" (input)="onMazzeLinkInput('47', mazze47Input.value)"
+              aria-label="Link Dropbox immagine mazze set 47"
+              placeholder="https://www.dropbox.com/.../mazze-set-47.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-sky-800"
+                (click)="saveMazzeLink('47')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella cursor-pointer items-center justify-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+                [disabled]="!mazzeLinkDraftValue('47')" (click)="clearMazzeLink('47')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 48</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze48Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('48')" (input)="onMazzeLinkInput('48', mazze48Input.value)"
-            aria-label="Link Dropbox immagine mazze set 48"
-            placeholder="https://www.dropbox.com/.../mazze-set-48.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('48')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('48')" (click)="clearMazzeLink('48')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 48</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze48Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('48')" (input)="onMazzeLinkInput('48', mazze48Input.value)"
+              aria-label="Link Dropbox immagine mazze set 48"
+              placeholder="https://www.dropbox.com/.../mazze-set-48.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('48')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('48')" (click)="clearMazzeLink('48')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 49</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze49Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('49')" (input)="onMazzeLinkInput('49', mazze49Input.value)"
-            aria-label="Link Dropbox immagine mazze set 49"
-            placeholder="https://www.dropbox.com/.../mazze-set-49.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('49')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('49')" (click)="clearMazzeLink('49')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 49</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze49Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('49')" (input)="onMazzeLinkInput('49', mazze49Input.value)"
+              aria-label="Link Dropbox immagine mazze set 49"
+              placeholder="https://www.dropbox.com/.../mazze-set-49.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('49')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('49')" (click)="clearMazzeLink('49')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 50</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze50Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('50')" (input)="onMazzeLinkInput('50', mazze50Input.value)"
-            aria-label="Link Dropbox immagine mazze set 50"
-            placeholder="https://www.dropbox.com/.../mazze-set-50.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('50')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('50')" (click)="clearMazzeLink('50')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 50</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze50Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('50')" (input)="onMazzeLinkInput('50', mazze50Input.value)"
+              aria-label="Link Dropbox immagine mazze set 50"
+              placeholder="https://www.dropbox.com/.../mazze-set-50.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('50')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('50')" (click)="clearMazzeLink('50')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 51</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze51Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('51')" (input)="onMazzeLinkInput('51', mazze51Input.value)"
-            aria-label="Link Dropbox immagine mazze set 51"
-            placeholder="https://www.dropbox.com/.../mazze-set-51.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('51')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('51')" (click)="clearMazzeLink('51')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 51</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze51Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('51')" (input)="onMazzeLinkInput('51', mazze51Input.value)"
+              aria-label="Link Dropbox immagine mazze set 51"
+              placeholder="https://www.dropbox.com/.../mazze-set-51.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('51')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('51')" (click)="clearMazzeLink('51')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze52Input type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('52')" (input)="onMazzeLinkInput('52', mazze52Input.value)"
-            aria-label="Link Dropbox immagine mazze set 52"
-            placeholder="https://www.dropbox.com/.../mazze-set-52.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('52')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('52')" (click)="clearMazzeLink('52')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze52Input type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('52')" (input)="onMazzeLinkInput('52', mazze52Input.value)"
+              aria-label="Link Dropbox immagine mazze set 52"
+              placeholder="https://www.dropbox.com/.../mazze-set-52.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('52')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('52')" (click)="clearMazzeLink('52')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
 
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52a</legend>
-        <div class="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input #mazze52aInput type="url" autocomplete="off" spellcheck="false"
-            class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
-            [value]="mazzeLinkDraftValue('52a')" (input)="onMazzeLinkInput('52a', mazze52aInput.value)"
-            aria-label="Link Dropbox immagine mazze set 52a"
-            placeholder="https://www.dropbox.com/.../mazze-set-52a.png" />
-          <div class="flex gap-2">
-            <button type="button"
-              class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
-              (click)="saveMazzeLink('52a')">Salva</button>
-            <button type="button"
-              class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
-              [disabled]="!mazzeLinkDraftValue('52a')" (click)="clearMazzeLink('52a')">Cancella</button>
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Link Dropbox mazze set 52a</legend>
+          <div class="mt-2 flex flex-col gap-2 sm:flex-row">
+            <input #mazze52aInput type="url" autocomplete="off" spellcheck="false"
+              class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              [value]="mazzeLinkDraftValue('52a')" (input)="onMazzeLinkInput('52a', mazze52aInput.value)"
+              aria-label="Link Dropbox immagine mazze set 52a"
+              placeholder="https://www.dropbox.com/.../mazze-set-52a.png" />
+            <div class="flex gap-2">
+              <button type="button"
+                class="inline-flex rounded-xl border border-transparent bg-sky-700 px-3 py-2 text-sm font-semibold text-white"
+                (click)="saveMazzeLink('52a')">Salva</button>
+              <button type="button"
+                class="inline-flex btn-cancella rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700"
+                [disabled]="!mazzeLinkDraftValue('52a')" (click)="clearMazzeLink('52a')">Cancella</button>
+            </div>
           </div>
-        </div>
-      </fieldset>
-    </div>
-  </section>
-
-  <figure class="mt-6 overflow-hidden rounded-2xl border border-slate-200 p-3 sm:p-4 mazza-figure">
-    <img ngSrc="/assets/images/mazza-transparent.png" width="879" height="373" priority
-      alt="Mazza with dimensional reference drawings for A, B, R and foro"
-      class="mx-auto h-auto w-full max-w-4xl object-contain" />
-  </figure>
-
-  <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5" aria-labelledby="filters-heading">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 id="filters-heading" class="text-base font-semibold text-slate-900">Filtra le mazze</h2>
-        <p class="mt-1 text-sm text-slate-600">Inserisci i valori minimi e massimi desiderati.</p>
+        </fieldset>
       </div>
-      <button type="button"
-        class="inline-flex cursor-pointer items-center justify-center self-start rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 sm:self-auto"
-        (click)="resetFilters()">
-        Azzera filtri
-      </button>
-    </div>
+    </section>
 
-    <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">A (mm)</legend>
-        <div class="mt-2 grid grid-cols-2 gap-2">
-          <input #aMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMin()"
-            (input)="aMin.set(aMinInput.value)" aria-label="A minimo in millimetri" placeholder="Min"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-          <input #aMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMax()"
-            (input)="aMax.set(aMaxInput.value)" aria-label="A massimo in millimetri" placeholder="Max"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+    <figure class="mt-6 overflow-hidden rounded-2xl border border-slate-200 p-3 sm:p-4 mazza-figure">
+      <img ngSrc="/assets/images/mazza-transparent.png" width="879" height="373" priority
+        alt="Mazza with dimensional reference drawings for A, B, R and foro"
+        class="mx-auto h-auto w-full max-w-4xl object-contain" />
+    </figure>
+
+    <section class="mt-6 rounded-2xl border border-sky-100 bg-sky-50/70 p-4 sm:p-5" aria-labelledby="filters-heading">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 id="filters-heading" class="text-base font-semibold text-slate-900">Filtra le mazze</h2>
+          <p class="mt-1 text-sm text-slate-600">Inserisci i valori minimi e massimi desiderati.</p>
         </div>
-      </fieldset>
-
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">B (mm)</legend>
-        <div class="mt-2 grid grid-cols-2 gap-2">
-          <input #bMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMin()"
-            (input)="bMin.set(bMinInput.value)" aria-label="B minimo in millimetri" placeholder="Min"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-          <input #bMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMax()"
-            (input)="bMax.set(bMaxInput.value)" aria-label="B massimo in millimetri" placeholder="Max"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-        </div>
-      </fieldset>
-
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">R (mm)</legend>
-        <div class="mt-2 grid grid-cols-2 gap-2">
-          <input #rMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMin()"
-            (input)="rMin.set(rMinInput.value)" aria-label="R minimo in millimetri" placeholder="Min"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-          <input #rMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMax()"
-            (input)="rMax.set(rMaxInput.value)" aria-label="R massimo in millimetri" placeholder="Max"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-        </div>
-      </fieldset>
-
-      <fieldset class="min-w-0">
-        <legend class="text-sm font-semibold text-slate-800">Peso (kg)</legend>
-        <div class="mt-2 grid grid-cols-2 gap-2">
-          <input #pesoMinInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMin()"
-            (input)="pesoMin.set(pesoMinInput.value)" aria-label="Peso minimo in chilogrammi" placeholder="Min"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-          <input #pesoMaxInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMax()"
-            (input)="pesoMax.set(pesoMaxInput.value)" aria-label="Peso massimo in chilogrammi" placeholder="Max"
-            class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
-        </div>
-      </fieldset>
-    </div>
-
-    <fieldset class="mt-5">
-      <legend class="text-sm font-semibold text-slate-800">Foro (mm)</legend>
-      <p class="mt-1 text-sm text-slate-600">Seleziona un diametro per filtrare il valore del foro. Lascia senza
-        selezione per includere tutti i valori.</p>
-      <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-        @for (value of foroValues(); track value) {
-        <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-700">
-          <input type="radio" name="foro-value" [value]="value" [checked]="foroValue() === value"
-            (change)="foroValue.set(value)" class="h-4 w-4 accent-sky-700" />
-          {{ value }} mm
-        </label>
-        }
+        <button type="button"
+          class="inline-flex cursor-pointer items-center justify-center self-start rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700 sm:self-auto"
+          (click)="resetFilters()">
+          Azzera filtri
+        </button>
       </div>
-    </fieldset>
-  </section>
 
-  <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white/85">
-    <table class="w-full min-w-[70rem] border-collapse text-left text-sm text-slate-700">
-      <caption class="sr-only">Elenco delle mazze con misure, peso e applicazioni</caption>
-      <thead class="bg-slate-950 text-xs uppercase tracking-wide text-white">
-        <tr>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pageTag')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('pageTag')">Page Tag <span aria-hidden="true">{{ sortIndicator('pageTag')
-                }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('articolo')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('articolo')">Articolo <span aria-hidden="true">{{ sortIndicator('articolo')
-                }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('aMm')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('aMm')">A (mm) <span aria-hidden="true">{{ sortIndicator('aMm') }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('bMm')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('bMm')">B (mm) <span aria-hidden="true">{{ sortIndicator('bMm') }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('foroOrAsola')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('foroOrAsola')">Foro / Asola <span aria-hidden="true">{{ sortIndicator('foroOrAsola')
-                }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('rMm')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('rMm')">R (mm) <span aria-hidden="true">{{ sortIndicator('rMm') }}</span></button>
-          </th>
-          <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pesoKg')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('pesoKg')">Peso (kg) <span aria-hidden="true">{{ sortIndicator('pesoKg')
-                }}</span></button>
-          </th>
-          <th scope="col" class="min-w-80 px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('applicazioni')">
-            <button type="button"
-              class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
-              (click)="sortBy('applicazioni')">Applicazioni <span aria-hidden="true">{{ sortIndicator('applicazioni')
-                }}</span></button>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-slate-200">
-        @for (blade of sortedBlades(); track blade.articolo + $index) {
-        <tr class="transition hover:bg-sky-50 cursor-pointer" role="button" tabindex="0" (click)="openMazzaImage(blade)"
-          (keydown.enter)="openMazzaImage(blade)">
-          <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.pageTag || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.articolo || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3">{{ blade.aMm || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3">{{ blade.bMm || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3">{{ blade.foroOrAsola || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3">{{ blade.rMm || '—' }}</td>
-          <td class="whitespace-nowrap px-4 py-3">{{ blade.pesoKg || '—' }}</td>
-          <td class="px-4 py-3 leading-6">{{ blade.applicazioni || '—' }}</td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">A (mm)</legend>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <input #aMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMin()"
+              (input)="aMin.set(aMinInput.value)" aria-label="A minimo in millimetri" placeholder="Min"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+            <input #aMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="aMax()"
+              (input)="aMax.set(aMaxInput.value)" aria-label="A massimo in millimetri" placeholder="Max"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          </div>
+        </fieldset>
 
-  @if (modalOpen()) {
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 ricerca-mazze-modal" role="dialog"
-    aria-modal="true" (click)="closeMazzaImage()" (keydown.escape)="closeMazzaImage()" tabindex="0">
-    <div class="relative max-w-[90vw] max-h-[90vh] p-4" (click)="$event.stopPropagation()">
-      <button type="button"
-        class="absolute right-2 top-2 z-50 inline-flex items-center justify-center rounded-full bg-white/80 p-2 text-slate-900 hover:bg-white/95 shadow-lg"
-        (click)="closeMazzaImage()" aria-label="Chiudi immagine">✕</button>
-      <div class="tile-viewport mx-auto">
-        @if (!modalUseCanvas()) {
-        @if (modalNaturalWidth() > 0 && modalNaturalHeight() > 0) {
-        <div class="tile-bg" [style.backgroundImage]="'url(' + modalImage() + ')'
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">B (mm)</legend>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <input #bMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMin()"
+              (input)="bMin.set(bMinInput.value)" aria-label="B minimo in millimetri" placeholder="Min"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+            <input #bMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="bMax()"
+              (input)="bMax.set(bMaxInput.value)" aria-label="B massimo in millimetri" placeholder="Max"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          </div>
+        </fieldset>
+
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">R (mm)</legend>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <input #rMinInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMin()"
+              (input)="rMin.set(rMinInput.value)" aria-label="R minimo in millimetri" placeholder="Min"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+            <input #rMaxInput type="number" min="0" step="0.1" inputmode="decimal" [value]="rMax()"
+              (input)="rMax.set(rMaxInput.value)" aria-label="R massimo in millimetri" placeholder="Max"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          </div>
+        </fieldset>
+
+        <fieldset class="min-w-0">
+          <legend class="text-sm font-semibold text-slate-800">Peso (kg)</legend>
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <input #pesoMinInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMin()"
+              (input)="pesoMin.set(pesoMinInput.value)" aria-label="Peso minimo in chilogrammi" placeholder="Min"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+            <input #pesoMaxInput type="number" min="0" step="0.01" inputmode="decimal" [value]="pesoMax()"
+              (input)="pesoMax.set(pesoMaxInput.value)" aria-label="Peso massimo in chilogrammi" placeholder="Max"
+              class="min-w-0 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-200" />
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="mt-5">
+        <legend class="text-sm font-semibold text-slate-800">Foro (mm)</legend>
+        <p class="mt-1 text-sm text-slate-600">Seleziona un diametro per filtrare il valore del foro. Lascia senza
+          selezione per includere tutti i valori.</p>
+        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+          @for (value of foroValues(); track value) {
+          <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+            <input type="radio" name="foro-value" [value]="value" [checked]="foroValue() === value"
+              (change)="foroValue.set(value)" class="h-4 w-4 accent-sky-700" />
+            {{ value }} mm
+          </label>
+          }
+        </div>
+      </fieldset>
+    </section>
+
+    <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white/85">
+      <table class="w-full min-w-[70rem] border-collapse text-left text-sm text-slate-700">
+        <caption class="sr-only">Elenco delle mazze con misure, peso e applicazioni</caption>
+        <thead class="bg-slate-950 text-xs uppercase tracking-wide text-white">
+          <tr>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pageTag')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('pageTag')">Page Tag <span aria-hidden="true">{{ sortIndicator('pageTag')
+                  }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('articolo')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('articolo')">Articolo <span aria-hidden="true">{{ sortIndicator('articolo')
+                  }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('aMm')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('aMm')">A (mm) <span aria-hidden="true">{{ sortIndicator('aMm') }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('bMm')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('bMm')">B (mm) <span aria-hidden="true">{{ sortIndicator('bMm') }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold"
+              [attr.aria-sort]="ariaSort('foroOrAsola')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('foroOrAsola')">Foro / Asola <span aria-hidden="true">{{ sortIndicator('foroOrAsola')
+                  }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('rMm')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('rMm')">R (mm) <span aria-hidden="true">{{ sortIndicator('rMm') }}</span></button>
+            </th>
+            <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('pesoKg')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('pesoKg')">Peso (kg) <span aria-hidden="true">{{ sortIndicator('pesoKg')
+                  }}</span></button>
+            </th>
+            <th scope="col" class="min-w-80 px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort('applicazioni')">
+              <button type="button"
+                class="inline-flex items-center gap-2 text-left hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-200"
+                (click)="sortBy('applicazioni')">Applicazioni <span aria-hidden="true">{{ sortIndicator('applicazioni')
+                  }}</span></button>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          @for (blade of sortedBlades(); track blade.articolo + $index) {
+          <tr class="transition hover:bg-sky-50 cursor-pointer" role="button" tabindex="0"
+            (click)="openMazzaImage(blade)" (keydown.enter)="openMazzaImage(blade)">
+            <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.pageTag || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-900">{{ blade.articolo || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ blade.aMm || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ blade.bMm || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ blade.foroOrAsola || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ blade.rMm || '—' }}</td>
+            <td class="whitespace-nowrap px-4 py-3">{{ blade.pesoKg || '—' }}</td>
+            <td class="px-4 py-3 leading-6">{{ blade.applicazioni || '—' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (modalOpen()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 ricerca-mazze-modal" role="dialog"
+      aria-modal="true" (click)="closeMazzaImage()" (keydown.escape)="closeMazzaImage()" tabindex="0">
+      <div class="relative max-w-[90vw] max-h-[90vh] p-4" (click)="$event.stopPropagation()">
+        <button type="button"
+          class="absolute right-2 top-2 z-50 inline-flex items-center justify-center rounded-full bg-white/80 p-2 text-slate-900 hover:bg-white/95 shadow-lg"
+          (click)="closeMazzaImage()" aria-label="Chiudi immagine">✕</button>
+        <div class="tile-viewport mx-auto">
+          @if (!modalUseCanvas()) {
+          @if (modalNaturalWidth() > 0 && modalNaturalHeight() > 0) {
+          <div class="tile-bg" [style.backgroundImage]="'url(' + modalImage() + ')'
             " [style.backgroundSize]="modalNaturalWidth() + 'px ' + modalNaturalHeight() + 'px'"
-          [style.backgroundPosition]="'-' + modalX() + 'px -' + modalY() + 'px'"></div>
-        }
-        @if (!(modalNaturalWidth() > 0 && modalNaturalHeight() > 0)) {
-        @if (!modalUseFallback()) {
-        <img class="tile-img" [ngSrc]="modalImage()" width="1890" height="1160" alt="Immagine mazze"
-          [style.transform]="'translate(' + (-modalX()) + 'px,' + (-modalY()) + 'px)'" (load)="onModalImageLoad($event)"
-          (error)="onModalImageError()" />
-        }
-        @if (modalUseFallback()) {
-        <img class="tile-img" src="{{ modalImage() }}" width="1890" height="1160" alt="Immagine mazze"
-          [style.transform]="'translate(' + (-modalX()) + 'px,' + (-modalY()) + 'px)'" (load)="onModalImageLoad($event)"
-          (error)="onModalImageError()" />
-        }
-        }
-        }
+            [style.backgroundPosition]="'-' + modalX() + 'px -' + modalY() + 'px'"></div>
+          }
+          @if (!(modalNaturalWidth() > 0 && modalNaturalHeight() > 0)) {
+          @if (!modalUseFallback()) {
+          <img class="tile-img" [ngSrc]="modalImage()" width="1890" height="1160" alt="Immagine mazze"
+            [style.transform]="'translate(' + (-modalX()) + 'px,' + (-modalY()) + 'px)'"
+            (load)="onModalImageLoad($event)" (error)="onModalImageError()" />
+          }
+          @if (modalUseFallback()) {
+          <img class="tile-img" src="{{ modalImage() }}" width="1890" height="1160" alt="Immagine mazze"
+            [style.transform]="'translate(' + (-modalX()) + 'px,' + (-modalY()) + 'px)'"
+            (load)="onModalImageLoad($event)" (error)="onModalImageError()" />
+          }
+          }
+          }
 
-        <div class="absolute left-2 top-2 z-20 rounded bg-white/40 px-2 py-1 text-xs text-slate-900">
-          <div class="font-semibold" style="text-shadow: 0 1px 2px rgba(0,0,0,0.35);">{{ modalLabel() }}</div>
-          <div>{{ modalImageName() }} — X: {{ modalX() }}, Y: {{ modalY() }}</div>
-          <div class="mt-1 flex gap-2">
-            <button type="button" class="rounded bg-slate-100 px-2 py-1 text-xs" (click)="toggleCanvasView()">
-              @if (!modalUseCanvas()) { Mostra con Canvas } @if (modalUseCanvas()) { Mostra immagine }
-            </button>
-            @if (modalArticolo()) {
-            <a href="https://cermag.com/ordini/articolo/{{ modalArticolo() }}" target="_blank" rel="noopener noreferrer"
-              class="rounded bg-sky-700 px-2 py-1 text-xs font-semibold text-white hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-              aria-label="View on Cermag mazza {{ modalArticolo() }}" (click)="$event.stopPropagation()">
-              View on Cermag
-            </a>
+          <div class="absolute left-2 top-2 z-20 rounded bg-white/40 px-2 py-1 text-xs text-slate-900">
+            <div class="font-semibold" style="text-shadow: 0 1px 2px rgba(0,0,0,0.35);">{{ modalLabel() }}</div>
+            <div>{{ modalImageName() }} — X: {{ modalX() }}, Y: {{ modalY() }}</div>
+            <div class="mt-1 flex gap-2">
+              <button type="button" class="rounded bg-slate-100 px-2 py-1 text-xs" (click)="toggleCanvasView()">
+                @if (!modalUseCanvas()) { Mostra con Canvas } @if (modalUseCanvas()) { Mostra immagine }
+              </button>
+              @if (modalArticolo()) {
+              <a href="https://cermag.com/ordini/articolo/{{ modalArticolo() }}" target="_blank"
+                rel="noopener noreferrer"
+                class="rounded bg-sky-700 px-2 py-1 text-xs font-semibold text-white hover:bg-sky-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                aria-label="View on Cermag mazza {{ modalArticolo() }}" (click)="$event.stopPropagation()">
+                View on Cermag
+              </a>
+              }
+            </div>
+            @if (!modalLoaded() && !modalLoadError()) {
+            <div>Loading...</div>
+            }
+            @if (modalLoadError()) {
+            <div class="text-red-600">Image failed to load</div>
+            }
+            @if (modalLoaded()) {
+
             }
           </div>
-          @if (!modalLoaded() && !modalLoadError()) {
-          <div>Loading...</div>
-          }
-          @if (modalLoadError()) {
-          <div class="text-red-600">Image failed to load</div>
-          }
-          @if (modalLoaded()) {
-
+          @if (modalUseCanvas()) {
+          <canvas class="tile-canvas" width="444" height="280"
+            style="display:block; width:444px; height:280px; border-radius:.5rem;"></canvas>
           }
         </div>
-        @if (modalUseCanvas()) {
-        <canvas class="tile-canvas" width="444" height="280"
-          style="display:block; width:444px; height:280px; border-radius:.5rem;"></canvas>
-        }
       </div>
     </div>
-  </div>
-  }
+    }
 
+  </div>
 </section>

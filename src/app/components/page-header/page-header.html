@@ -1,10 +1,12 @@
-<div class="relative py-4">
-  <a [routerLink]="backLink()"
-    class="absolute left-4 top-4 inline-flex cursor-pointer items-center rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700"
-    aria-label="Torna allo scanner">
-    <img ngSrc="/assets/images/home.png" width="20" height="20" alt="Home" class="mr-2 h-5 w-5 object-contain" />
-    Torna allo scanner
-  </a>
+<header class="page-header">
+  <div class="page-header__content">
+    <a [routerLink]="backLink()"
+      class="inline-flex cursor-pointer items-center rounded-lg border border-white/80 bg-transparent px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      aria-label="Torna allo scanner">
+      <img ngSrc="/assets/images/home.png" width="20" height="20" alt="Home" class="mr-2 h-5 w-5 object-contain" />
+      Torna allo scanner
+    </a>
 
-  <h1 class="text-lg font-semibold text-slate-900 text-center">{{ title() }}</h1>
-</div>
+    <h1 class="page-header__title">{{ title() }}</h1>
+  </div>
+</header>
