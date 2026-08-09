@@ -12,3 +12,42 @@
   --ui-warning-200: #fde68a;
   --ui-warning-500: #f59e0b;
 }
+
+html,
+body,
+app-root {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(180deg, #f8fafc 0%, #fff7ed 48%, #eff6ff 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Warning styles for enabled 'Cancella' buttons */
+button.btn-cancella:not([disabled]) {
+  background-color: #fff7ed !important; /* very light warning */
+  border-color: #f59e0b !important; /* amber-500 */
+  color: #78350f !important; /* darker amber for text */
+  cursor: pointer !important;
+}
+
+button.btn-cancella:not([disabled]):hover {
+  background-color: #ffedd5 !important; /* slightly stronger on hover */
+}
+
+button.btn-cancella:focus {
+  outline: 2px solid rgba(245, 158, 11, 0.15) !important;
+  outline-offset: 2px !important;
+}
+
+/* Disabled appearance for btn-cancella */
+button.btn-cancella[disabled] {
+  opacity: 0.55 !important;
+  background-color: #f3f4f6 !important;
+  border-color: #e5e7eb !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+}

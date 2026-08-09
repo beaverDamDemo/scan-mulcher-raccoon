@@ -18,4 +18,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/ricerca-pezzi-di-ricambio/ricerca-pezzi-di-ricambio').then((module) => module.RicercaPezziDiRicambio),
   },
+  {
+    path: 'recognize-the-tractor',
+    loadComponent: () =>
+      import('./pages/recognize-the-tractor/recognize-the-tractor').then((module) => module.RecognizeTheTractor),
+  },
 ];

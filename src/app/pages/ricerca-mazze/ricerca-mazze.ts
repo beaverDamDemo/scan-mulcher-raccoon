@@ -534,6 +534,25 @@ export class RicercaMazze {
     return d ? d() : '';
   }
 
+  // Indicates whether the "Cancella" button should be enabled for a set id.
+  // Returns true when there is a saved value in localStorage for the key,
+  // or when the current draft differs from the known default (i.e. user-entered).
+  protected canClearMazzeLink(id: string): boolean {
+    const key = `scan-mulcher-mazze-${id}-link`;
+    if (isPlatformBrowser(this.platformId)) {
+      const stored = window.localStorage.getItem(key);
+      if (stored !== null && stored.trim().length > 0) return true;
+    }
+
+    const draft = this.mazzeLinkDrafts.get(String(id));
+    if (!draft) return false;
+
+    const current = draft().trim();
+    const defaultVal = DEFAULT_DROPBOX_LINKS[id as keyof typeof DEFAULT_DROPBOX_LINKS] ?? '';
+    // If current draft is non-empty and differs from the default placeholder, allow clearing.
+    return current.length > 0 && current !== defaultVal;
+  }
+
   // Cache of preloaded Image objects by set id.
   protected readonly preloadedImages = new Map<string, HTMLImageElement>();
 

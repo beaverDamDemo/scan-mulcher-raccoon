@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgIf, NgForOf } from '@angular/common';
 import { Component, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { PageHeader } from '../../components/page-header/page-header';
 
@@ -7,7 +7,7 @@ const MAX_URLS = 6;
 
 @Component({
   selector: 'app-ricerca-pezzi-di-ricambio',
-  imports: [PageHeader],
+  imports: [PageHeader, NgIf, NgForOf],
   templateUrl: './ricerca-pezzi-di-ricambio.html',
   styleUrl: './ricerca-pezzi-di-ricambio.css',
 })
@@ -15,8 +15,13 @@ export class RicercaPezziDiRicambio {
   private readonly platformId = inject(PLATFORM_ID);
   protected readonly query = signal('');
   protected readonly debouncedQuery = signal('');
-  protected readonly urls = signal<string[]>(['']);
+  protected readonly urls = signal<string[]>([
+    'https://www.ceneje.si/Iskanje/Izdelki?q=duraturn+2056016',
+    'https://www.mimovrste.com/iskanje?src=sug&s=Duraturn%20205%2F60%20R16',
+    '',
+  ]);
   protected readonly enteredUrls = computed(() => this.urls().filter(u => u.trim() !== ''));
+  protected readonly previewUrls = signal<string[]>([]);
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -67,6 +72,7 @@ export class RicercaPezziDiRicambio {
   }
 
   onCerca(): void {
+    this.previewUrls.set(this.enteredUrls().filter(url => this.isPreviewableUrl(url)));
   }
 
   private maybeAppendInput(index: number): void {
@@ -80,19 +86,41 @@ export class RicercaPezziDiRicambio {
     }
   }
 
+  private isPreviewableUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }
+
   private restoreUrls(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
     try {
-      const savedUrls: unknown = JSON.parse(localStorage.getItem(URL_STORAGE_KEY) ?? '[]');
-      if (Array.isArray(savedUrls)) {
-        const urls = savedUrls.filter((url): url is string => typeof url === 'string').slice(0, MAX_URLS);
-        this.urls.set(urls.length > 0 ? urls : ['']);
+      const raw = localStorage.getItem(URL_STORAGE_KEY);
+      if (raw !== null) {
+        const savedUrls: unknown = JSON.parse(raw);
+        if (Array.isArray(savedUrls)) {
+          const urls = savedUrls.filter((url): url is string => typeof url === 'string').slice(0, MAX_URLS);
+          if (urls.length > 0) {
+            // Merge saved values into current defaults: prefer non-empty saved entries,
+            // but keep defaults when saved entries are empty.
+            const base = this.urls().slice(0, MAX_URLS);
+            const merged = base.slice();
+            for (let i = 0; i < urls.length; i++) {
+              const v = urls[i] ?? '';
+              if (v.trim().length > 0) merged[i] = v;
+            }
+            this.urls.set(merged);
+          }
+        }
       }
     } catch {
-      this.urls.set(['']);
+      // If parsing fails, keep the current default urls signal.
     }
   }
 

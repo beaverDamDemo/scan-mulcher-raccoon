@@ -4,7 +4,7 @@
 
     <div class="mt-4">
       <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
-      <input id="pezzi-query" type="text" placeholder="Digita per cercare..."
+      <input id="pezzi-query" type="text" placeholder="Inserisci dati per ricerca..."
         class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)" />
 
       <p class="mt-3 text-sm text-slate-700">Hai inserito: <strong>{{ debouncedQuery() }}</strong></p>
@@ -13,27 +13,49 @@
     <div class="mt-6">
       <label class="block mb-2 font-medium">Inserisci URL (max 6)</label>
       <div class="space-y-2">
-        @for (url of urls(); track $index; let i = $index) {
-        <div class="flex gap-2">
+        <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
           <label class="sr-only">URL {{ i + 1 }}</label>
           <input type="url" [value]="url" placeholder="https://example.com/sample{{ i + 1 }}"
             class="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
             (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
           <button type="button"
-            class="rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+            class="rounded-xl btn-cancella border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
             [disabled]="url.trim() === ''" [attr.aria-label]="'Cancella URL ' + (i + 1)"
             (click)="clearUrl(i)">Cancella</button>
         </div>
-        }
       </div>
 
       <button type="button"
         class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2"
         (click)="onCerca()">Cerca</button>
 
-      <p class="mt-3 text-sm text-slate-700">URL inseriti: <strong>{{ enteredUrls().length ? enteredUrls().join(', ') :
-          '—' }}</strong></p>
+      <div class="mt-3 text-sm text-slate-700">
+        <div class="font-medium">URL inseriti:</div>
+        <ul class="mt-1 space-y-1">
+          <ng-container *ngIf="enteredUrls().length; else noUrls">
+            <li *ngFor="let url of enteredUrls(); let i = index" class="break-words">
+              <a class="text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
+                rel="noopener noreferrer">{{ url }}</a>
+            </li>
+          </ng-container>
+          <ng-template #noUrls>
+            <li>—</li>
+          </ng-template>
+        </ul>
+      </div>
     </div>
+
+    <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
+      <h2 id="anteprime-title" class="text-lg font-semibold text-slate-900">Anteprime siti</h2>
+      <div class="mt-3 space-y-6">
+        <article *ngFor="let url of previewUrls(); let i = index">
+          <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
+            rel="noopener noreferrer">{{ url }}</a>
+          <iframe class="mt-2 h-96 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
+            loading="lazy" referrerpolicy="no-referrer"></iframe>
+        </article>
+      </div>
+    </section>
 
     <p class="mt-3 text-sm text-slate-600">Questa è una pagina di esempio per la ricerca dei pezzi di ricambio.
       Contenuto verrà aggiunto qui.</p>

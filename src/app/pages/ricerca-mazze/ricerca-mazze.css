@@ -22,3 +22,35 @@
   background-color: transparent;
   border-radius: 0.5rem;
 }
+
+/* Background for the mazza figure that shows through transparent PNG areas */
+.mazza-figure {
+  background-image:
+    radial-gradient(circle, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(59, 130, 246, 0.03), rgba(99, 102, 241, 0.02));
+  background-size:
+    12px 12px,
+    cover;
+  background-repeat: repeat, no-repeat;
+}
+
+.mazza-figure img {
+  background: transparent;
+}
+
+/* Visually distinguish disabled buttons within this page */
+button[disabled],
+.ricerca-mazze-page button[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background-color: #f3f4f6; /* gray-100 */
+  color: #6b7280; /* gray-500 */
+  border-color: #e5e7eb; /* gray-200 */
+  box-shadow: none;
+}
+
+/* Prevent hover styles from applying to disabled buttons */
+button[disabled]:hover,
+.ricerca-mazze-page button[disabled]:hover {
+  background-color: #f3f4f6;
+}
