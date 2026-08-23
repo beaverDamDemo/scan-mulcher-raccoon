@@ -7,65 +7,161 @@
       <div class="mt-4">
         <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
         <input id="pezzi-query" type="text" placeholder="duraturn 2056016"
-          class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none" (keyup)="onKeyUp($event)"
-          (focus)="onQueryFocus($event)" />
+          class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+          (input)="onQueryInput($event)" />
 
         <!-- removed user-typed query display -->
       </div>
 
       <div class="mt-4 site-buttons">
-        <button type="button" (click)="onSiteClick('ceneje')" data-site="ceneje" data-initial="C" aria-label="ceneje"
-          class="site-button site-button--ceneje"
-          [class.site-button--active]="activeSite() === 'ceneje'">ceneje.si</button>
-        <button type="button" (click)="onSiteClick('mimovrste')" data-site="mimovrste" data-initial="M"
-          aria-label="mimovrste" class="site-button site-button--mimovrste"
-          [class.site-button--active]="activeSite() === 'mimovrste'">mimovrste</button>
-        <button type="button" (click)="onSiteClick('merkur')" data-site="merkur" data-initial="Me" aria-label="merkur"
-          class="site-button site-button--merkur"
-          [class.site-button--active]="activeSite() === 'merkur'">merkur</button>
-        <button type="button" (click)="onSiteClick('bolha')" data-site="bolha" data-initial="B" aria-label="bolha"
-          class="site-button site-button--bolha"
-          [class.site-button--active]="activeSite() === 'bolha'">bolha.com</button>
-        <button type="button" (click)="onSiteClick('bigbang')" data-site="bigbang" data-initial="BB"
-          aria-label="bigbang" class="site-button site-button--bigbang"
-          [class.site-button--active]="activeSite() === 'bigbang'">bigbang</button>
-        <button type="button" (click)="onSiteClick('shoppster')" data-site="shoppster" data-initial="S"
-          aria-label="shoppster" class="site-button site-button--shoppster"
-          [class.site-button--active]="activeSite() === 'shoppster'">shoppster</button>
+        @for (shop of defaultShops(); track shop.key) {
+        <div class="saved-shop">
+          <button type="button" [attr.data-site]="shop.key" [attr.data-initial]="shop.initial"
+            [attr.aria-label]="shop.name" class="site-button" [class]="shop.style"
+            [class.site-button--active]="activeSite() === shop.key" (click)="onSiteClick(shop.key)">{{ shop.name
+            }}</button>
+          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
+            (click)="requestDefaultShopRemoval(shop)">&times;</button>
+        </div>
+        }
+        @for (shop of savedShops(); track shop.template) {
+        <div class="saved-shop">
+          <a class="site-button site-button--saved" [attr.data-initial]="shop.name.slice(0, 1)"
+            [href]="createShopSearchUrl(shop.template, query())" [title]="shop.sourceUrl" target="_blank"
+            rel="noopener noreferrer">{{ shop.name }}</a>
+          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
+            (click)="requestShopRemoval(shop)">&times;</button>
+        </div>
+        }
       </div>
 
+      @if (isAddShopModalOpen()) {
+      <div class="add-shop-modal" role="presentation" (keydown.escape)="closeAddShopModal()">
+        <button type="button" class="add-shop-modal__backdrop" aria-label="Chiudi finestra"
+          (click)="closeAddShopModal()"></button>
+        <section class="add-shop-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="add-shop-modal-title">
+          <div class="add-shop-modal__header">
+            <h2 id="add-shop-modal-title" class="text-lg font-semibold text-slate-900">Aggiungi negozio online</h2>
+            <button type="button" class="add-shop-modal__close" aria-label="Chiudi finestra" #addShopModalCloseButton
+              (click)="closeAddShopModal()">&times;</button>
+          </div>
+          <div class="add-shop-modal__form">
+            <label for="shop-url" class="block text-sm font-medium text-slate-700">URL di ricerca del negozio</label>
+            <input id="shop-url" #addShopUrlInput type="url" inputmode="url" autocomplete="url" [value]="newShopUrl()"
+              placeholder="www.myshoponline.com/q=myitem1000"
+              class="mt-2 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+              [attr.aria-describedby]="shopUrlError() ? 'shop-url-error' : null" (input)="onNewShopUrlInput($event)"
+              (keydown.enter)="addShop()" />
+            @if (shopUrlError(); as error) {
+            <p id="shop-url-error" class="mt-2 text-sm text-red-700" role="alert">{{ error }}</p>
+            }
+            <button type="button"
+              class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="newShopUrl().trim() === ''" (click)="addShop()">Salva negozio</button>
+          </div>
+        </section>
+      </div>
+      }
+
+      @if (isResetConfirmationOpen()) {
+      <div class="add-shop-modal" role="presentation" (keydown.escape)="cancelShopReset()">
+        <button type="button" class="add-shop-modal__backdrop" aria-label="Annulla ripristino"
+          (click)="cancelShopReset()"></button>
+        <section class="add-shop-modal__dialog" role="dialog" aria-modal="true"
+          aria-labelledby="reset-shops-modal-title">
+          <div class="add-shop-modal__header">
+            <h2 id="reset-shops-modal-title" class="text-lg font-semibold text-slate-900">Ripristina negozi</h2>
+            <button type="button" class="add-shop-modal__close" aria-label="Annulla ripristino"
+              (click)="cancelShopReset()">&times;</button>
+          </div>
+          <p class="mt-4 text-sm text-slate-700">Vuoi ripristinare i negozi predefiniti? I negozi aggiunti verranno
+            rimossi.</p>
+          <div class="remove-shop-modal__actions">
+            <button type="button" class="remove-shop-modal__cancel" (click)="cancelShopReset()">Annulla</button>
+            <button type="button" class="remove-shop-modal__confirm" (click)="confirmShopReset()">Ripristina</button>
+          </div>
+        </section>
+      </div>
+      }
+
+      @if (defaultShopPendingRemoval(); as shop) {
+      <div class="add-shop-modal" role="presentation" (keydown.escape)="cancelDefaultShopRemoval()">
+        <button type="button" class="add-shop-modal__backdrop" aria-label="Annulla rimozione"
+          (click)="cancelDefaultShopRemoval()"></button>
+        <section class="add-shop-modal__dialog" role="dialog" aria-modal="true"
+          aria-labelledby="remove-default-shop-modal-title">
+          <div class="add-shop-modal__header">
+            <h2 id="remove-default-shop-modal-title" class="text-lg font-semibold text-slate-900">Rimuovi negozio</h2>
+            <button type="button" class="add-shop-modal__close" aria-label="Annulla rimozione"
+              (click)="cancelDefaultShopRemoval()">&times;</button>
+          </div>
+          <p class="mt-4 text-sm text-slate-700">Vuoi rimuovere {{ shop.name }} dai negozi predefiniti?</p>
+          <div class="remove-shop-modal__actions">
+            <button type="button" class="remove-shop-modal__cancel"
+              (click)="cancelDefaultShopRemoval()">Annulla</button>
+            <button type="button" class="remove-shop-modal__confirm"
+              (click)="confirmDefaultShopRemoval()">Rimuovi</button>
+          </div>
+        </section>
+      </div>
+      }
+
+      @if (shopPendingRemoval(); as shop) {
+      <div class="add-shop-modal" role="presentation" (keydown.escape)="cancelShopRemoval()">
+        <button type="button" class="add-shop-modal__backdrop" aria-label="Annulla rimozione"
+          (click)="cancelShopRemoval()"></button>
+        <section class="add-shop-modal__dialog" role="dialog" aria-modal="true"
+          aria-labelledby="remove-shop-modal-title">
+          <div class="add-shop-modal__header">
+            <h2 id="remove-shop-modal-title" class="text-lg font-semibold text-slate-900">Rimuovi negozio</h2>
+            <button type="button" class="add-shop-modal__close" aria-label="Annulla rimozione"
+              (click)="cancelShopRemoval()">&times;</button>
+          </div>
+          <p class="mt-4 text-sm text-slate-700">Vuoi rimuovere {{ shop.name }} dai negozi salvati?</p>
+          <div class="remove-shop-modal__actions">
+            <button type="button" class="remove-shop-modal__cancel" (click)="cancelShopRemoval()">Annulla</button>
+            <button type="button" class="remove-shop-modal__confirm" (click)="confirmShopRemoval()">Rimuovi</button>
+          </div>
+        </section>
+      </div>
+      }
+
       <div class="mt-6">
-        <label class="block mb-2 font-medium">Populated URLs</label>
+        <h2 class="block mb-2 font-medium">URL dei negozi da cercare</h2>
         <div class="space-y-2">
           <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
-            <label class="sr-only">URL {{ i + 1 }}</label>
-            <input type="url" [value]="url" placeholder="https://example.com/sample{{ i + 1 }}"
-              class="min-w-0 flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
-              (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
-            <button type="button"
-              class="rounded-xl btn-cancella border border-slate-300 px-3 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-              [disabled]="url.trim() === ''" [attr.aria-label]="'Cancella URL ' + (i + 1)"
-              (click)="clearUrl(i)">Cancella</button>
+            <label class="w-28 shrink-0 self-center text-sm font-medium text-slate-700"
+              [attr.for]="'shop-search-url-' + i">URL {{ i + 1 }}</label>
+            <output [id]="'shop-search-url-' + i" class="generated-url">{{ url }}</output>
           </div>
         </div>
 
         <button type="button"
-          class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer"
-          (click)="onCerca()">Cerca</button>
+          class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          [disabled]="query().trim() === ''" (click)="onCerca()">Cerca</button>
 
         <!-- URL list removed as not needed anymore -->
       </div>
 
       <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
-        <h2 id="anteprime-title" class="text-lg font-semibold text-slate-900">Anteprime siti</h2>
-        <div class="mt-3 space-y-6">
+        <h2 id="anteprime-title" class="text-base font-semibold text-slate-900">Anteprime siti</h2>
+        <div class="mt-2 space-y-3">
           <article *ngFor="let url of previewUrls(); let i = index">
             <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
               rel="noopener noreferrer">{{ url }}</a>
-            <iframe class="mt-2 h-96 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
+            <iframe class="mt-1 h-48 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
               loading="lazy" referrerpolicy="no-referrer"></iframe>
           </article>
         </div>
+      </section>
+
+      <section class="shop-actions" aria-labelledby="add-shop-title">
+        <h2 id="add-shop-title" class="sr-only">Gestione negozi online</h2>
+        <button type="button"
+          class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer"
+          (click)="openAddShopModal()">➕ Aggiungi negozio online</button>
+        <button type="button" class="reset-shop-buttons" (click)="requestShopReset()">↺ Ripristina negozi
+          predefiniti</button>
       </section>
 
     </section>
