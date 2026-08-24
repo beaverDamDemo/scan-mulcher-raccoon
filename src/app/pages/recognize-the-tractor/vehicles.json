@@ -1,0 +1,354 @@
+[
+  {
+    "id": 1,
+    "brand": "Fendt",
+    "model": "716 Vario",
+    "years": "1998–2006",
+    "image": "assets/tractors/fendt_716.jpg",
+    "facts": [
+      "Vario CVT pioneer",
+      "Extremely popular in Germany"
+    ]
+  },
+  {
+    "id": 2,
+    "brand": "Fendt",
+    "model": "820 Vario",
+    "years": "2006–2014",
+    "image": "assets/tractors/fendt_820.jpg",
+    "facts": [
+      "High torque 6-cyl Deutz engine",
+      "Top seller in EU premium segment"
+    ]
+  },
+  {
+    "id": 3,
+    "brand": "Fendt",
+    "model": "828 Vario",
+    "years": "2010–2020",
+    "image": "assets/tractors/fendt_828.jpg",
+    "facts": [
+      "Flagship mid-range tractor",
+      "Very common on large EU farms"
+    ]
+  },
+  {
+    "id": 4,
+    "brand": "John Deere",
+    "model": "6620",
+    "years": "2002–2008",
+    "image": "assets/tractors/jd_6620.jpg",
+    "facts": [
+      "6.8L PowerTech engine",
+      "Legendary reliability"
+    ]
+  },
+  {
+    "id": 5,
+    "brand": "John Deere",
+    "model": "6920",
+    "years": "2002–2008",
+    "image": "assets/tractors/jd_6920.jpg",
+    "facts": [
+      "Very popular in Benelux",
+      "Strong hydraulic performance"
+    ]
+  },
+  {
+    "id": 6,
+    "brand": "John Deere",
+    "model": "7430 Premium",
+    "years": "2006–2012",
+    "image": "assets/tractors/jd_7430.jpg",
+    "facts": [
+      "IVT transmission option",
+      "Excellent for mixed farming"
+    ]
+  },
+  {
+    "id": 7,
+    "brand": "John Deere",
+    "model": "6155R",
+    "years": "2015–2024",
+    "image": "assets/tractors/jd_6155r.jpg",
+    "facts": [
+      "EU bestseller",
+      "High comfort cab"
+    ]
+  },
+  {
+    "id": 8,
+    "brand": "New Holland",
+    "model": "TM155",
+    "years": "2002–2007",
+    "image": "assets/tractors/nh_tm155.jpg",
+    "facts": [
+      "Strong pulling power",
+      "Popular in UK & Ireland"
+    ]
+  },
+  {
+    "id": 9,
+    "brand": "New Holland",
+    "model": "T6.165",
+    "years": "2013–2024",
+    "image": "assets/tractors/nh_t6_165.jpg",
+    "facts": [
+      "Versatile mid-range tractor",
+      "Excellent loader performance"
+    ]
+  },
+  {
+    "id": 10,
+    "brand": "New Holland",
+    "model": "T7.270",
+    "years": "2011–2024",
+    "image": "assets/tractors/nh_t7_270.jpg",
+    "facts": [
+      "High horsepower",
+      "Common on large arable farms"
+    ]
+  },
+  {
+    "id": 11,
+    "brand": "Case IH",
+    "model": "MX135",
+    "years": "1996–2002",
+    "image": "assets/tractors/case_mx135.jpg",
+    "facts": [
+      "Classic Magnum design",
+      "Very durable"
+    ]
+  },
+  {
+    "id": 12,
+    "brand": "Case IH",
+    "model": "Maxxum 125",
+    "years": "2008–2024",
+    "image": "assets/tractors/case_maxxum125.jpg",
+    "facts": [
+      "Efficient 4-cyl engine",
+      "Great for dairy farms"
+    ]
+  },
+  {
+    "id": 13,
+    "brand": "Case IH",
+    "model": "Puma 150",
+    "years": "2007–2024",
+    "image": "assets/tractors/case_puma150.jpg",
+    "facts": [
+      "Strong PTO power",
+      "Popular in Germany & France"
+    ]
+  },
+  {
+    "id": 14,
+    "brand": "Massey Ferguson",
+    "model": "6480",
+    "years": "2004–2012",
+    "image": "assets/tractors/mf_6480.jpg",
+    "facts": [
+      "Dynashift transmission",
+      "Very common in France"
+    ]
+  },
+  {
+    "id": 15,
+    "brand": "Massey Ferguson",
+    "model": "7618",
+    "years": "2012–2020",
+    "image": "assets/tractors/mf_7618.jpg",
+    "facts": [
+      "Dyna-6 gearbox",
+      "Excellent fuel efficiency"
+    ]
+  },
+  {
+    "id": 16,
+    "brand": "Massey Ferguson",
+    "model": "7719 S",
+    "years": "2017–2024",
+    "image": "assets/tractors/mf_7719s.jpg",
+    "facts": [
+      "High comfort cab",
+      "Great for contractors"
+    ]
+  },
+  {
+    "id": 17,
+    "brand": "Claas",
+    "model": "Arion 640",
+    "years": "2007–2013",
+    "image": "assets/tractors/claas_arion640.jpg",
+    "facts": [
+      "CPS engine",
+      "Popular in France & Germany"
+    ]
+  },
+  {
+    "id": 18,
+    "brand": "Claas",
+    "model": "Arion 650",
+    "years": "2013–2024",
+    "image": "assets/tractors/claas_arion650.jpg",
+    "facts": [
+      "Hexashift transmission",
+      "Very versatile"
+    ]
+  },
+  {
+    "id": 19,
+    "brand": "Claas",
+    "model": "Axion 830",
+    "years": "2011–2024",
+    "image": "assets/tractors/claas_axion830.jpg",
+    "facts": [
+      "High horsepower",
+      "Excellent traction"
+    ]
+  },
+  {
+    "id": 20,
+    "brand": "Deutz-Fahr",
+    "model": "Agrotron 150",
+    "years": "1995–2003",
+    "image": "assets/tractors/deutz_150.jpg",
+    "facts": [
+      "Air-cooled engine era",
+      "Very reliable"
+    ]
+  },
+  {
+    "id": 21,
+    "brand": "Deutz-Fahr",
+    "model": "Agrotron 165",
+    "years": "2003–2010",
+    "image": "assets/tractors/deutz_165.jpg",
+    "facts": [
+      "Strong hydraulics",
+      "Popular in Italy & Germany"
+    ]
+  },
+  {
+    "id": 22,
+    "brand": "Deutz-Fahr",
+    "model": "7250 TTV",
+    "years": "2012–2024",
+    "image": "assets/tractors/deutz_7250.jpg",
+    "facts": [
+      "TTV CVT transmission",
+      "Premium flagship model"
+    ]
+  },
+  {
+    "id": 23,
+    "brand": "Zetor",
+    "model": "Proxima 8441",
+    "years": "2004–2012",
+    "image": "assets/tractors/zetor_proxima8441.jpg",
+    "facts": [
+      "Affordable & durable",
+      "Very common in Slovenia"
+    ]
+  },
+  {
+    "id": 24,
+    "brand": "Zetor",
+    "model": "Forterra 11441",
+    "years": "2004–2010",
+    "image": "assets/tractors/zetor_forterra11441.jpg",
+    "facts": [
+      "Strong 4-cyl engine",
+      "Popular in CEE region"
+    ]
+  },
+  {
+    "id": 25,
+    "brand": "Zetor",
+    "model": "Crystal 160",
+    "years": "2015–2024",
+    "image": "assets/tractors/zetor_crystal160.jpg",
+    "facts": [
+      "6-cyl power",
+      "Modern Zetor flagship"
+    ]
+  },
+  {
+    "id": 26,
+    "brand": "Valtra",
+    "model": "T151",
+    "years": "2005–2013",
+    "image": "assets/tractors/valtra_t151.jpg",
+    "facts": [
+      "Finnish reliability",
+      "Great in cold climates"
+    ]
+  },
+  {
+    "id": 27,
+    "brand": "Valtra",
+    "model": "N174",
+    "years": "2015–2024",
+    "image": "assets/tractors/valtra_n174.jpg",
+    "facts": [
+      "Very maneuverable",
+      "Excellent for forestry"
+    ]
+  },
+  {
+    "id": 28,
+    "brand": "Valtra",
+    "model": "T234",
+    "years": "2014–2024",
+    "image": "assets/tractors/valtra_t234.jpg",
+    "facts": [
+      "High comfort cab",
+      "Strong pulling power"
+    ]
+  },
+  {
+    "id": 29,
+    "brand": "SAME",
+    "model": "Silver 130",
+    "years": "1996–2004",
+    "image": "assets/tractors/same_silver130.jpg",
+    "facts": [
+      "Italian engineering",
+      "Very durable"
+    ]
+  },
+  {
+    "id": 30,
+    "brand": "SAME",
+    "model": "Iron 150",
+    "years": "2004–2012",
+    "image": "assets/tractors/same_iron150.jpg",
+    "facts": [
+      "Strong hydraulics",
+      "Popular in southern EU"
+    ]
+  },
+  {
+    "id": 31,
+    "brand": "Steyr",
+    "model": "CVT 150",
+    "years": "1999–2007",
+    "image": "assets/tractors/steyr_cvt150.jpg",
+    "facts": [
+      "Early CVT pioneer",
+      "Austrian engineering"
+    ]
+  },
+  {
+    "id": 32,
+    "brand": "Steyr",
+    "model": "4120 Multi",
+    "years": "2013–2024",
+    "image": "assets/tractors/steyr_4120.jpg",
+    "facts": [
+      "Compact & versatile",
+      "Great for mixed farms"
+    ]
+  }
+]

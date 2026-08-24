@@ -1,8 +1,65 @@
 .recognize-the-tractor {
-  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
 }
 
 .recognize-the-tractor h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.recognize-the-tractor header p {
+  margin: 8px 0 24px;
+  color: #475569;
+}
+
+.tractor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.tractor-card {
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 8%);
+}
+
+.tractor-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.tractor-card-content {
+  padding: 16px;
+}
+
+.tractor-brand,
+.tractor-years {
+  margin: 0;
+  color: #475569;
+}
+
+.tractor-brand {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tractor-card h2 {
+  margin: 4px 0;
   font-size: 1.25rem;
-  margin: 0 0 8px 0;
+}
+
+.tractor-card ul {
+  margin: 16px 0 0;
+  padding-left: 20px;
+  color: #334155;
 }

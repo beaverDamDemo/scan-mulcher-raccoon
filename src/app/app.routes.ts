@@ -23,4 +23,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/recognize-the-tractor/recognize-the-tractor').then((module) => module.RecognizeTheTractor),
   },
+  {
+    path: 'riconosci-trattori',
+    loadComponent: () =>
+      import('./pages/recognize-the-tractor/recognize-the-tractor').then((module) => module.RecognizeTheTractor),
+  },
 ];

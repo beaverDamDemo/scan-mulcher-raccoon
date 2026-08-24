@@ -1,5 +1,6 @@
 import { isPlatformBrowser, NgIf, NgForOf } from '@angular/common';
 import { Component, ElementRef, PLATFORM_ID, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PageHeader } from '../../components/page-header/page-header';
 
 const URL_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-urls';
@@ -12,6 +13,7 @@ interface SavedShop {
   name: string;
   sourceUrl: string;
   template: string;
+  color: string;
 }
 
 interface DefaultShop {
@@ -19,6 +21,11 @@ interface DefaultShop {
   name: string;
   initial: string;
   style: string;
+}
+
+interface PreviewUrl {
+  url: string;
+  safeUrl: SafeResourceUrl;
 }
 
 const DEFAULT_SHOPS: readonly DefaultShop[] = [
@@ -30,6 +37,15 @@ const DEFAULT_SHOPS: readonly DefaultShop[] = [
   { key: 'shoppster', name: 'shoppster', initial: 'S', style: 'site-button--shoppster' },
 ];
 
+const SAVED_SHOP_COLORS = [
+  'linear-gradient(90deg, #0f766e, #14b8a6)',
+  'linear-gradient(90deg, #9a3412, #f97316)',
+  'linear-gradient(90deg, #1d4ed8, #38bdf8)',
+  'linear-gradient(90deg, #be123c, #fb7185)',
+  'linear-gradient(90deg, #4d7c0f, #84cc16)',
+  'linear-gradient(90deg, #7e22ce, #c084fc)',
+] as const;
+
 @Component({
   selector: 'app-ricerca-pezzi-di-ricambio',
   imports: [PageHeader, NgIf, NgForOf],
@@ -38,6 +54,7 @@ const DEFAULT_SHOPS: readonly DefaultShop[] = [
 })
 export class RicercaPezziDiRicambio {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly sanitizer = inject(DomSanitizer);
   protected readonly query = signal('');
   protected readonly debouncedQuery = signal('');
   protected readonly urls = signal<string[]>(['', '', '', '', '', '']);
@@ -50,7 +67,7 @@ export class RicercaPezziDiRicambio {
   protected readonly isResetConfirmationOpen = signal(false);
   protected readonly defaultShopPendingRemoval = signal<DefaultShop | null>(null);
   protected readonly shopPendingRemoval = signal<SavedShop | null>(null);
-  protected readonly previewUrls = signal<string[]>([]);
+  protected readonly previewUrls = signal<PreviewUrl[]>([]);
   protected readonly activeSite = signal<string | null>(null);
   protected readonly addShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('addShopUrlInput');
   // Map of site keys to URL templates. `{q}` will be replaced with `encodeURIComponent(query)`.
@@ -241,29 +258,18 @@ export class RicercaPezziDiRicambio {
   }
 
   onCerca(): void {
-    const shopUrls = this.query().trim() === ''
-      ? []
-      : this.savedShops().map(shop => this.createShopSearchUrl(shop.template, this.query()));
-    const urls = [...this.enteredUrls(), ...shopUrls].filter(url => this.isPreviewableUrl(url));
-    this.previewUrls.set(urls);
+    const urls = [...new Set(this.enteredUrls().filter(url => this.isPreviewableUrl(url)))];
+    this.previewUrls.set(urls.map(url => ({
+      url,
+      safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+    })));
 
     if (isPlatformBrowser(this.platformId) && urls.length > 0) {
       try {
-        // Create and click anchor elements synchronously so each click is treated
-        // as part of the original user gesture. This increases the likelihood
-        // that browsers will open multiple tabs instead of blocking them.
         for (const url of urls) {
-          const a = document.createElement('a');
-          a.href = url;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          // Some browsers require the element to be in the document to trigger a navigation
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+          window.open(url, '_blank', 'noopener,noreferrer');
         }
-      } catch (e) {
+      } catch {
         // ignore failures to open tabs (popup blockers)
       }
     }
@@ -374,7 +380,7 @@ export class RicercaPezziDiRicambio {
     }
   }
 
-  private createSavedShop(value: string): SavedShop | null {
+  private createSavedShop(value: string, color = this.nextSavedShopColor()): SavedShop | null {
     try {
       const trimmedValue = value.trim();
       const sourceUrl = new URL(/^https?:\/\//i.test(trimmedValue) ? trimmedValue : `https://${trimmedValue}`);
@@ -387,6 +393,7 @@ export class RicercaPezziDiRicambio {
         name: this.createShopName(sourceUrl.hostname),
         sourceUrl: sourceUrl.toString(),
         template,
+        color,
       };
     } catch {
       return null;
@@ -396,6 +403,10 @@ export class RicercaPezziDiRicambio {
   private createShopName(hostname: string): string {
     const domain = hostname.replace(/^www\./i, '').split('.')[0] ?? hostname;
     return domain.replace(/[-_]+/g, ' ').replace(/\b\w/g, character => character.toUpperCase());
+  }
+
+  private nextSavedShopColor(): string {
+    return SAVED_SHOP_COLORS[this.savedShops().length % SAVED_SHOP_COLORS.length];
   }
 
   protected createShopSearchUrl(template: string, query: string): string {
@@ -487,7 +498,7 @@ export class RicercaPezziDiRicambio {
         const savedUrls: unknown = JSON.parse(raw);
         if (Array.isArray(savedUrls)) {
           const shops = savedUrls
-            .map(savedShop => this.restoreSavedShop(savedShop))
+            .map((savedShop, index) => this.restoreSavedShop(savedShop, SAVED_SHOP_COLORS[index % SAVED_SHOP_COLORS.length]))
             .filter((savedShop): savedShop is SavedShop => savedShop !== null);
           this.savedShops.set(shops.filter((shop, index) =>
             shops.findIndex(candidate => candidate.template === shop.template) === index,
@@ -499,13 +510,14 @@ export class RicercaPezziDiRicambio {
     }
   }
 
-  private restoreSavedShop(value: unknown): SavedShop | null {
+  private restoreSavedShop(value: unknown, fallbackColor: string): SavedShop | null {
     if (typeof value === 'string') {
-      return this.createSavedShop(value);
+      return this.createSavedShop(value, fallbackColor);
     }
 
     if (typeof value === 'object' && value !== null && 'sourceUrl' in value && typeof value.sourceUrl === 'string') {
-      return this.createSavedShop(value.sourceUrl);
+      const color = 'color' in value && typeof value.color === 'string' ? value.color : fallbackColor;
+      return this.createSavedShop(value.sourceUrl, color);
     }
 
     return null;

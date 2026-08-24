@@ -1,4 +1,24 @@
 <div class="page recognize-the-tractor">
-  <h1>Recognize the Tractor</h1>
-  <p>This page is intentionally empty.</p>
+  <header>
+    <h1>Riconosci Trattori</h1>
+    <p>{{ tractors.length }} modelli disponibili</p>
+  </header>
+
+  <section class="tractor-grid" aria-label="Elenco trattori">
+    @for (tractor of tractors; track tractor.id) {
+    <article class="tractor-card">
+      <img [src]="tractor.image" [alt]="tractor.brand + ' ' + tractor.model" />
+      <div class="tractor-card-content">
+        <p class="tractor-brand">{{ tractor.brand }}</p>
+        <h2>{{ tractor.model }}</h2>
+        <p class="tractor-years">{{ tractor.years }}</p>
+        <ul>
+          @for (fact of tractor.facts; track fact) {
+          <li>{{ fact }}</li>
+          }
+        </ul>
+      </div>
+    </article>
+    }
+  </section>
 </div>

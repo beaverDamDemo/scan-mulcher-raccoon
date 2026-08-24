@@ -27,8 +27,8 @@
         @for (shop of savedShops(); track shop.template) {
         <div class="saved-shop">
           <a class="site-button site-button--saved" [attr.data-initial]="shop.name.slice(0, 1)"
-            [href]="createShopSearchUrl(shop.template, query())" [title]="shop.sourceUrl" target="_blank"
-            rel="noopener noreferrer">{{ shop.name }}</a>
+            [style.background]="shop.color" [href]="createShopSearchUrl(shop.template, query())"
+            [title]="shop.sourceUrl" target="_blank" rel="noopener noreferrer">{{ shop.name }}</a>
           <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
             (click)="requestShopRemoval(shop)">&times;</button>
         </div>
@@ -146,11 +146,11 @@
       <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
         <h2 id="anteprime-title" class="text-base font-semibold text-slate-900">Anteprime siti</h2>
         <div class="mt-2 space-y-3">
-          <article *ngFor="let url of previewUrls(); let i = index">
-            <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="url" target="_blank"
-              rel="noopener noreferrer">{{ url }}</a>
-            <iframe class="mt-1 h-48 w-full border border-slate-300" [src]="url" [title]="'Anteprima di ' + url"
-              loading="lazy" referrerpolicy="no-referrer"></iframe>
+          <article *ngFor="let preview of previewUrls(); let i = index">
+            <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="preview.url" target="_blank"
+              rel="noopener noreferrer">{{ preview.url }}</a>
+            <iframe class="mt-1 h-48 w-full border border-slate-300" [src]="preview.safeUrl"
+              [title]="'Anteprima di ' + preview.url" loading="lazy" referrerpolicy="no-referrer"></iframe>
           </article>
         </div>
       </section>
