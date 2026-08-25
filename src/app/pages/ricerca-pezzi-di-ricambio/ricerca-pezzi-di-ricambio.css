@@ -183,6 +183,40 @@
   margin-top: 1.5rem;
 }
 
+.shop-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.shop-preview {
+  flex: 1 1 12rem;
+}
+
+.shop-preview__link {
+  display: block;
+  overflow: hidden;
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shop-preview__frame-wrapper {
+  overflow: hidden;
+  margin-top: 0.25rem;
+  height: 16rem;
+  border: 1px solid #cbd5e1;
+}
+
+/* Iframe is rendered at 2x size then scaled down so more of the page fits in the small preview. */
+.shop-preview__frame {
+  width: 200%;
+  height: 200%;
+  border: 0;
+  transform: scale(0.5);
+  transform-origin: top left;
+}
+
 .shop-actions {
   display: flex;
   flex-wrap: wrap;

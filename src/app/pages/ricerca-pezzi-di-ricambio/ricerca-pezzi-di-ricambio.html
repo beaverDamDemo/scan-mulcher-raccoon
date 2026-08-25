@@ -145,12 +145,14 @@
 
       <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
         <h2 id="anteprime-title" class="text-base font-semibold text-slate-900">Anteprime siti</h2>
-        <div class="mt-2 space-y-3">
-          <article *ngFor="let preview of previewUrls(); let i = index">
-            <a class="text-sm text-emerald-700 underline hover:text-emerald-800" [href]="preview.url" target="_blank"
-              rel="noopener noreferrer">{{ preview.url }}</a>
-            <iframe class="mt-1 h-48 w-full border border-slate-300" [src]="preview.safeUrl"
-              [title]="'Anteprima di ' + preview.url" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <div class="shop-previews mt-2">
+          <article *ngFor="let preview of previewUrls(); let i = index" class="shop-preview">
+            <a class="shop-preview__link text-emerald-700 underline hover:text-emerald-800" [href]="preview.url"
+              target="_blank" rel="noopener noreferrer">{{ preview.url }}</a>
+            <div class="shop-preview__frame-wrapper">
+              <iframe class="shop-preview__frame" [src]="preview.safeUrl" [title]="'Anteprima di ' + preview.url"
+                loading="lazy" referrerpolicy="no-referrer"></iframe>
+            </div>
           </article>
         </div>
       </section>

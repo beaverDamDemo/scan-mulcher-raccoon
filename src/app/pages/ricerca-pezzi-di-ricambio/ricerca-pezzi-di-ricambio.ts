@@ -265,13 +265,25 @@ export class RicercaPezziDiRicambio {
     })));
 
     if (isPlatformBrowser(this.platformId) && urls.length > 0) {
-      try {
-        for (const url of urls) {
-          window.open(url, '_blank', 'noopener,noreferrer');
-        }
-      } catch {
-        // ignore failures to open tabs (popup blockers)
+      for (const url of urls) {
+        this.openInNewTab(url);
       }
+    }
+  }
+
+  // Simulated anchor clicks avoid the popup blocker that stops repeated window.open() calls.
+  private openInNewTab(url: string): void {
+    try {
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.style.display = 'none';
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+    } catch {
+      // ignore failures to open tabs (popup blockers)
     }
   }
 
