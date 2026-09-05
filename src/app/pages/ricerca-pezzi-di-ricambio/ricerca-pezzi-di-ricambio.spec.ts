@@ -4,6 +4,10 @@ import { vi } from 'vitest';
 
 import { RicercaPezziDiRicambio } from './ricerca-pezzi-di-ricambio';
 
+interface ShopTemplateCreator {
+  createShopSearchTemplate(value: string): string | null;
+}
+
 describe('RicercaPezziDiRicambio', () => {
   let component: RicercaPezziDiRicambio;
   let fixture: ComponentFixture<RicercaPezziDiRicambio>;
@@ -36,5 +40,14 @@ describe('RicercaPezziDiRicambio', () => {
       'noopener,noreferrer',
     );
     vi.useRealTimers();
+  });
+
+  it('removes stale part references from a pasted search URL', () => {
+    const templateCreator = component as unknown as ShopTemplateCreator;
+    const template = templateCreator.createShopSearchTemplate(
+      'https://b2b.farmcommerce.si/products/0.171.2614.0%2F10.aspx?view=search&q=2.4119.134.0&searchedString=0.171.2614.0%2F10#lsearch=0.171.2614.0%2F10',
+    );
+
+    expect(template).toBe('https://b2b.farmcommerce.si/products/0.171.2614.0%2F10.aspx?view=search&q={q}');
   });
 });

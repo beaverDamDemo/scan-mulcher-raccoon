@@ -1,6 +1,8 @@
+<app-page-header [title]="'Riconosci Trattori'" [backLink]="'/'"></app-page-header>
+
 <div class="page recognize-the-tractor">
   <header>
-    <h1>Riconosci Trattori</h1>
+    <h2>Riconosci Trattori</h2>
     <p>{{ tractors.length }} modelli disponibili</p>
   </header>
 
@@ -12,11 +14,6 @@
         <p class="tractor-brand">{{ tractor.brand }}</p>
         <h2>{{ tractor.model }}</h2>
         <p class="tractor-years">{{ tractor.years }}</p>
-        <ul>
-          @for (fact of tractor.facts; track fact) {
-          <li>{{ fact }}</li>
-          }
-        </ul>
       </div>
     </article>
     }

@@ -10,8 +10,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
+import { PageHeader } from './components/page-header/page-header';
 import { ScanRecord } from './models/scan-record';
 import { OcrResult, OcrService } from './services/ocr.service';
 import { DropboxTokenStoreService } from './services/dropbox-token-store.service';
@@ -36,7 +35,7 @@ interface ScanSession {
 
 @Component({
   selector: 'app-scanner-home',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, PageHeader],
   host: {
     class: 'block min-h-screen',
   },

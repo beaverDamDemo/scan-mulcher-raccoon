@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { PageHeader } from '../../components/page-header/page-header';
 import vehicles from './vehicles.json';
 
 export interface Tractor {
@@ -8,11 +9,11 @@ export interface Tractor {
   readonly model: string;
   readonly years: string;
   readonly image: string;
-  readonly facts: readonly string[];
 }
 
 @Component({
   selector: 'app-recognize-the-tractor',
+  imports: [PageHeader],
   templateUrl: './recognize-the-tractor.html',
   styleUrl: './recognize-the-tractor.css',
 })

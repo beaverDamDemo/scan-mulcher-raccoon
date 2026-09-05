@@ -1,12 +1,14 @@
+<app-page-header [title]="title"></app-page-header>
+
 <main
   class="scan-shell min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(186,230,253,0.45),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#fff7ed_48%,_#eff6ff_100%)] text-slate-950">
   <section class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:gap-8 lg:px-8 lg:py-10">
-    <header
+    <section
       class="glass-panel overflow-hidden rounded-[2rem] border border-white/70 px-5 py-5 shadow-[0_30px_120px_rgba(15,23,42,0.12)] sm:px-6 sm:py-6">
       <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div class="min-w-0 max-w-3xl space-y-4">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <img ngSrc="/assets/images/logo.png" width="96" height="96" priority alt="Scan Mulcher Goblin logo"
+            <img ngSrc="/assets/images/tractor-outline.png" width="96" height="96" priority alt="Scan Mulcher logo"
               class="h-20 w-20 shrink-0 rounded-2xl border border-white/70 bg-white/80 object-contain p-2 shadow-sm shadow-slate-950/10 sm:h-24 sm:w-24" />
             <div class="min-w-0">
               <p class="text-sm font-semibold uppercase tracking-[0.35em] text-sky-700">{{ title }}</p>
@@ -14,9 +16,9 @@
             </div>
           </div>
           <div class="space-y-3">
-            <h1 class="max-w-2xl text-2xl leading-tight text-slate-950 sm:text-3xl font-serif">
+            <h2 class="max-w-2xl text-2xl leading-tight text-slate-950 sm:text-3xl font-serif">
               Browser-first label scanning with OCR and swappable storage.
-            </h1>
+            </h2>
           </div>
         </div>
 
@@ -50,30 +52,9 @@
               </button>
             </div>
           </div>
-
-          <nav aria-label="Main navigation" class="col-span-2 flex justify-end items-center gap-2">
-            <a routerLink="/ricerca-mazze"
-              class="inline-flex items-center justify-center rounded-xl border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-800 transition hover:border-sky-400 hover:bg-sky-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
-              <img ngSrc="/assets/images/ricerca-mazze.png" width="20" height="20" alt="Ricerca mazze"
-                class="mr-2 h-5 w-5 object-contain" />
-              Ricerca Mazze
-            </a>
-
-            <a routerLink="/ricerca-pezzi-di-ricambio"
-              class="inline-flex items-center justify-center rounded-xl border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-800 transition hover:border-sky-400 hover:bg-sky-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
-              <img ngSrc="/assets/images/ricerca-pezzi-di-ricambio.png" width="20" height="20"
-                alt="Ricerca pezzi di ricambio" class="mr-2 h-5 w-5 object-contain" />
-              Ricerca Pezzi di Ricambio
-            </a>
-
-            <a routerLink="/riconosci-trattori"
-              class="inline-flex items-center justify-center rounded-xl border border-sky-300 bg-sky-50 px-4 py-2 text-sm font-semibold text-sky-800 transition hover:border-sky-400 hover:bg-sky-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-700">
-              Riconosci Trattori
-            </a>
-          </nav>
         </div>
       </div>
-    </header>
+    </section>
 
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)]">
       <section

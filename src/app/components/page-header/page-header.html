@@ -1,12 +1,39 @@
 <header class="page-header">
   <div class="page-header__content">
-    <a [routerLink]="backLink()"
-      class="inline-flex cursor-pointer items-center rounded-lg border border-white/80 bg-transparent px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-      aria-label="Torna allo scanner">
-      <img ngSrc="/assets/images/home.png" width="20" height="20" alt="Home" class="mr-2 h-5 w-5 object-contain" />
-      Torna allo scanner
-    </a>
+    <div class="page-header__left">
+      <a routerLink="/" class="page-header__logo-link" aria-label="Vai alla pagina principale">
+        <img ngSrc="/assets/images/tractor-outline.png" width="40" height="40" priority alt="Scan Mulcher logo"
+          class="page-header__logo" />
+      </a>
+      @if (backLink(); as link) {
+      <a [routerLink]="link"
+        class="inline-flex cursor-pointer items-center rounded-lg border border-white/80 bg-transparent px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        aria-label="Torna allo scanner">
+        <img ngSrc="/assets/images/home.png" width="20" height="20" alt="Home" class="mr-2 h-5 w-5 object-contain" />
+        Torna allo scanner
+      </a>
+      }
+    </div>
 
     <h1 class="page-header__title">{{ title() }}</h1>
+
+    <button type="button" class="page-header__menu" aria-controls="primary-navigation"
+      [attr.aria-expanded]="navigationOpen()"
+      [attr.aria-label]="navigationOpen() ? 'Chiudi menu di navigazione' : 'Apri menu di navigazione'"
+      (click)="toggleNavigation()">
+      <span class="page-header__menu-icon" [class.page-header__menu-icon--open]="navigationOpen()" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <nav id="primary-navigation" class="page-header__nav" [class.page-header__nav--open]="navigationOpen()"
+      aria-label="Navigazione principale">
+      @for (item of navigationItems; track item.link) {
+      <a [routerLink]="item.link" routerLinkActive="page-header__nav-link--active" ariaCurrentWhenActive="page"
+        (click)="closeNavigation()">{{ item.label }}</a>
+      }
+    </nav>
   </div>
 </header>

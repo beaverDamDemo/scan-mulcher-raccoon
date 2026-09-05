@@ -4,7 +4,7 @@
   padding: 32px 16px;
 }
 
-.recognize-the-tractor h1 {
+.recognize-the-tractor h2 {
   margin: 0;
   font-size: 2rem;
 }
@@ -56,10 +56,4 @@
 .tractor-card h2 {
   margin: 4px 0;
   font-size: 1.25rem;
-}
-
-.tractor-card ul {
-  margin: 16px 0 0;
-  padding-left: 20px;
-  color: #334155;
 }

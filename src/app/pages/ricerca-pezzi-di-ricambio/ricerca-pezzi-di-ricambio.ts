@@ -8,6 +8,7 @@ const SHOP_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-shops';
 const REMOVED_DEFAULT_SHOPS_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-removed-default-shops';
 const MAX_URLS = 6;
 const SEARCH_PARAMETER_NAMES = new Set(['q', 'query', 's', 'search', 'keyword', 'keywords', 'term', 'text', 'search_q']);
+const PART_REFERENCE_PATTERN = /^\d+(?:[./-]\d+){2,}(?:___\d+)?$/;
 
 interface SavedShop {
   name: string;
@@ -365,6 +366,7 @@ export class RicercaPezziDiRicambio {
         .find(parameter => SEARCH_PARAMETER_NAMES.has(parameter.toLowerCase()));
       if (searchParameter !== undefined) {
         parsedUrl.searchParams.set(searchParameter, '{q}');
+        this.removeStalePartReferences(parsedUrl, searchParameter);
         return parsedUrl.toString().replace('%7Bq%7D', '{q}');
       }
 
@@ -401,6 +403,20 @@ export class RicercaPezziDiRicambio {
       };
     } catch {
       return null;
+    }
+  }
+
+  private removeStalePartReferences(url: URL, searchParameter: string): void {
+    url.hash = '';
+    url.pathname = url.pathname
+      .split('/')
+      .filter(segment => !PART_REFERENCE_PATTERN.test(decodeURIComponent(segment)))
+      .join('/');
+
+    for (const [parameter, value] of [...url.searchParams.entries()]) {
+      if (parameter !== searchParameter && PART_REFERENCE_PATTERN.test(decodeURIComponent(value))) {
+        url.searchParams.delete(parameter);
+      }
     }
   }
 

@@ -4,351 +4,454 @@
     "brand": "Fendt",
     "model": "716 Vario",
     "years": "1998–2006",
-    "image": "assets/tractors/fendt_716.jpg",
-    "facts": [
-      "Vario CVT pioneer",
-      "Extremely popular in Germany"
-    ]
+    "image": "assets/tractors/fendt_716.jpg"
   },
   {
     "id": 2,
     "brand": "Fendt",
     "model": "820 Vario",
     "years": "2006–2014",
-    "image": "assets/tractors/fendt_820.jpg",
-    "facts": [
-      "High torque 6-cyl Deutz engine",
-      "Top seller in EU premium segment"
-    ]
+    "image": "assets/tractors/fendt_820.jpg"
   },
   {
     "id": 3,
     "brand": "Fendt",
     "model": "828 Vario",
     "years": "2010–2020",
-    "image": "assets/tractors/fendt_828.jpg",
-    "facts": [
-      "Flagship mid-range tractor",
-      "Very common on large EU farms"
-    ]
+    "image": "assets/tractors/fendt_828.jpg"
   },
   {
     "id": 4,
     "brand": "John Deere",
     "model": "6620",
     "years": "2002–2008",
-    "image": "assets/tractors/jd_6620.jpg",
-    "facts": [
-      "6.8L PowerTech engine",
-      "Legendary reliability"
-    ]
+    "image": "assets/tractors/jd_6620.jpg"
   },
   {
     "id": 5,
     "brand": "John Deere",
     "model": "6920",
     "years": "2002–2008",
-    "image": "assets/tractors/jd_6920.jpg",
-    "facts": [
-      "Very popular in Benelux",
-      "Strong hydraulic performance"
-    ]
+    "image": "assets/tractors/jd_6920.jpg"
   },
   {
     "id": 6,
     "brand": "John Deere",
     "model": "7430 Premium",
     "years": "2006–2012",
-    "image": "assets/tractors/jd_7430.jpg",
-    "facts": [
-      "IVT transmission option",
-      "Excellent for mixed farming"
-    ]
+    "image": "assets/tractors/jd_7430.jpg"
   },
   {
     "id": 7,
     "brand": "John Deere",
     "model": "6155R",
     "years": "2015–2024",
-    "image": "assets/tractors/jd_6155r.jpg",
-    "facts": [
-      "EU bestseller",
-      "High comfort cab"
-    ]
+    "image": "assets/tractors/jd_6155r.jpg"
   },
   {
     "id": 8,
     "brand": "New Holland",
     "model": "TM155",
     "years": "2002–2007",
-    "image": "assets/tractors/nh_tm155.jpg",
-    "facts": [
-      "Strong pulling power",
-      "Popular in UK & Ireland"
-    ]
+    "image": "assets/tractors/nh_tm155.jpg"
   },
   {
     "id": 9,
     "brand": "New Holland",
     "model": "T6.165",
     "years": "2013–2024",
-    "image": "assets/tractors/nh_t6_165.jpg",
-    "facts": [
-      "Versatile mid-range tractor",
-      "Excellent loader performance"
-    ]
+    "image": "assets/tractors/nh_t6_165.jpg"
   },
   {
     "id": 10,
     "brand": "New Holland",
     "model": "T7.270",
     "years": "2011–2024",
-    "image": "assets/tractors/nh_t7_270.jpg",
-    "facts": [
-      "High horsepower",
-      "Common on large arable farms"
-    ]
+    "image": "assets/tractors/nh_t7_270.jpg"
   },
   {
     "id": 11,
     "brand": "Case IH",
     "model": "MX135",
     "years": "1996–2002",
-    "image": "assets/tractors/case_mx135.jpg",
-    "facts": [
-      "Classic Magnum design",
-      "Very durable"
-    ]
+    "image": "assets/tractors/case_mx135.jpg"
   },
   {
     "id": 12,
     "brand": "Case IH",
     "model": "Maxxum 125",
     "years": "2008–2024",
-    "image": "assets/tractors/case_maxxum125.jpg",
-    "facts": [
-      "Efficient 4-cyl engine",
-      "Great for dairy farms"
-    ]
+    "image": "assets/tractors/case_maxxum125.jpg"
   },
   {
     "id": 13,
     "brand": "Case IH",
     "model": "Puma 150",
     "years": "2007–2024",
-    "image": "assets/tractors/case_puma150.jpg",
-    "facts": [
-      "Strong PTO power",
-      "Popular in Germany & France"
-    ]
+    "image": "assets/tractors/case_puma150.jpg"
   },
   {
     "id": 14,
     "brand": "Massey Ferguson",
     "model": "6480",
     "years": "2004–2012",
-    "image": "assets/tractors/mf_6480.jpg",
-    "facts": [
-      "Dynashift transmission",
-      "Very common in France"
-    ]
+    "image": "assets/tractors/mf_6480.jpg"
   },
   {
     "id": 15,
     "brand": "Massey Ferguson",
     "model": "7618",
     "years": "2012–2020",
-    "image": "assets/tractors/mf_7618.jpg",
-    "facts": [
-      "Dyna-6 gearbox",
-      "Excellent fuel efficiency"
-    ]
+    "image": "assets/tractors/mf_7618.jpg"
   },
   {
     "id": 16,
     "brand": "Massey Ferguson",
     "model": "7719 S",
     "years": "2017–2024",
-    "image": "assets/tractors/mf_7719s.jpg",
-    "facts": [
-      "High comfort cab",
-      "Great for contractors"
-    ]
+    "image": "assets/tractors/mf_7719s.jpg"
   },
   {
     "id": 17,
     "brand": "Claas",
     "model": "Arion 640",
     "years": "2007–2013",
-    "image": "assets/tractors/claas_arion640.jpg",
-    "facts": [
-      "CPS engine",
-      "Popular in France & Germany"
-    ]
+    "image": "assets/tractors/claas_arion640.jpg"
   },
   {
     "id": 18,
     "brand": "Claas",
     "model": "Arion 650",
     "years": "2013–2024",
-    "image": "assets/tractors/claas_arion650.jpg",
-    "facts": [
-      "Hexashift transmission",
-      "Very versatile"
-    ]
+    "image": "assets/tractors/claas_arion650.jpg"
   },
   {
     "id": 19,
     "brand": "Claas",
     "model": "Axion 830",
     "years": "2011–2024",
-    "image": "assets/tractors/claas_axion830.jpg",
-    "facts": [
-      "High horsepower",
-      "Excellent traction"
-    ]
+    "image": "assets/tractors/claas_axion830.jpg"
   },
   {
     "id": 20,
     "brand": "Deutz-Fahr",
     "model": "Agrotron 150",
     "years": "1995–2003",
-    "image": "assets/tractors/deutz_150.jpg",
-    "facts": [
-      "Air-cooled engine era",
-      "Very reliable"
-    ]
+    "image": "assets/tractors/deutz_150.jpg"
   },
   {
     "id": 21,
     "brand": "Deutz-Fahr",
     "model": "Agrotron 165",
     "years": "2003–2010",
-    "image": "assets/tractors/deutz_165.jpg",
-    "facts": [
-      "Strong hydraulics",
-      "Popular in Italy & Germany"
-    ]
+    "image": "assets/tractors/deutz_165.jpg"
   },
   {
     "id": 22,
     "brand": "Deutz-Fahr",
     "model": "7250 TTV",
     "years": "2012–2024",
-    "image": "assets/tractors/deutz_7250.jpg",
-    "facts": [
-      "TTV CVT transmission",
-      "Premium flagship model"
-    ]
+    "image": "assets/tractors/deutz_7250.jpg"
   },
   {
     "id": 23,
     "brand": "Zetor",
     "model": "Proxima 8441",
     "years": "2004–2012",
-    "image": "assets/tractors/zetor_proxima8441.jpg",
-    "facts": [
-      "Affordable & durable",
-      "Very common in Slovenia"
-    ]
+    "image": "assets/tractors/zetor_proxima8441.jpg"
   },
   {
     "id": 24,
     "brand": "Zetor",
     "model": "Forterra 11441",
     "years": "2004–2010",
-    "image": "assets/tractors/zetor_forterra11441.jpg",
-    "facts": [
-      "Strong 4-cyl engine",
-      "Popular in CEE region"
-    ]
+    "image": "assets/tractors/zetor_forterra11441.jpg"
   },
   {
     "id": 25,
     "brand": "Zetor",
     "model": "Crystal 160",
     "years": "2015–2024",
-    "image": "assets/tractors/zetor_crystal160.jpg",
-    "facts": [
-      "6-cyl power",
-      "Modern Zetor flagship"
-    ]
+    "image": "assets/tractors/zetor_crystal160.jpg"
   },
   {
     "id": 26,
     "brand": "Valtra",
     "model": "T151",
     "years": "2005–2013",
-    "image": "assets/tractors/valtra_t151.jpg",
-    "facts": [
-      "Finnish reliability",
-      "Great in cold climates"
-    ]
+    "image": "assets/tractors/valtra_t151.jpg"
   },
   {
     "id": 27,
     "brand": "Valtra",
     "model": "N174",
     "years": "2015–2024",
-    "image": "assets/tractors/valtra_n174.jpg",
-    "facts": [
-      "Very maneuverable",
-      "Excellent for forestry"
-    ]
+    "image": "assets/tractors/valtra_n174.jpg"
   },
   {
     "id": 28,
     "brand": "Valtra",
     "model": "T234",
     "years": "2014–2024",
-    "image": "assets/tractors/valtra_t234.jpg",
-    "facts": [
-      "High comfort cab",
-      "Strong pulling power"
-    ]
+    "image": "assets/tractors/valtra_t234.jpg"
   },
   {
     "id": 29,
     "brand": "SAME",
     "model": "Silver 130",
     "years": "1996–2004",
-    "image": "assets/tractors/same_silver130.jpg",
-    "facts": [
-      "Italian engineering",
-      "Very durable"
-    ]
+    "image": "assets/tractors/same_silver130.jpg"
   },
   {
     "id": 30,
     "brand": "SAME",
     "model": "Iron 150",
     "years": "2004–2012",
-    "image": "assets/tractors/same_iron150.jpg",
-    "facts": [
-      "Strong hydraulics",
-      "Popular in southern EU"
-    ]
+    "image": "assets/tractors/same_iron150.jpg"
   },
   {
     "id": 31,
     "brand": "Steyr",
     "model": "CVT 150",
     "years": "1999–2007",
-    "image": "assets/tractors/steyr_cvt150.jpg",
-    "facts": [
-      "Early CVT pioneer",
-      "Austrian engineering"
-    ]
+    "image": "assets/tractors/steyr_cvt150.jpg"
   },
   {
     "id": 32,
     "brand": "Steyr",
     "model": "4120 Multi",
     "years": "2013–2024",
-    "image": "assets/tractors/steyr_4120.jpg",
-    "facts": [
-      "Compact & versatile",
-      "Great for mixed farms"
-    ]
+    "image": "assets/tractors/steyr_4120.jpg"
+  },
+  {
+    "id": 33,
+    "brand": "Torpedo",
+    "model": "7506",
+    "years": "1982–1995",
+    "image": "assets/tractors/torpedo_7506.jpg"
+  },
+  {
+    "id": 34,
+    "brand": "Torpedo",
+    "model": "9006",
+    "years": "1980–1995",
+    "image": "assets/tractors/torpedo_9006.jpg"
+  },
+  {
+    "id": 35,
+    "brand": "Antonio Carraro",
+    "model": "TTR 9400",
+    "years": "2004–2015",
+    "image": "assets/tractors/ac_ttr9400.jpg"
+  },
+  {
+    "id": 36,
+    "brand": "Antonio Carraro",
+    "model": "TRX 7800",
+    "years": "2001–2012",
+    "image": "assets/tractors/ac_trx7800.jpg"
+  },
+  {
+    "id": 37,
+    "brand": "Lamborghini",
+    "model": "R4 105",
+    "years": "2007–2013",
+    "image": "assets/tractors/lambo_r4_105.jpg"
+  },
+  {
+    "id": 38,
+    "brand": "Lamborghini",
+    "model": "Strike 115",
+    "years": "2014–2024",
+    "image": "assets/tractors/lambo_strike115.jpg"
+  },
+  {
+    "id": 39,
+    "brand": "Landini",
+    "model": "Legend 145",
+    "years": "1998–2008",
+    "image": "assets/tractors/landini_legend145.jpg"
+  },
+  {
+    "id": 40,
+    "brand": "Landini",
+    "model": "Powerfarm 105",
+    "years": "2008–2024",
+    "image": "assets/tractors/landini_powerfarm105.jpg"
+  },
+  {
+    "id": 41,
+    "brand": "New Holland",
+    "model": "TD95D",
+    "years": "2002–2010",
+    "image": "assets/tractors/nh_td95d.jpg"
+  },
+  {
+    "id": 42,
+    "brand": "New Holland",
+    "model": "T6050",
+    "years": "2007–2012",
+    "image": "assets/tractors/nh_t6050.jpg"
+  },
+  {
+    "id": 43,
+    "brand": "Steyr",
+    "model": "8080",
+    "years": "1978–1991",
+    "image": "assets/tractors/steyr_8080.jpg"
+  },
+  {
+    "id": 44,
+    "brand": "Steyr",
+    "model": "9125",
+    "years": "1996–2006",
+    "image": "assets/tractors/steyr_9125.jpg"
+  },
+  {
+    "id": 45,
+    "brand": "IMT",
+    "model": "539",
+    "years": "1970–2012",
+    "image": "assets/tractors/imt_539.jpg"
+  },
+  {
+    "id": 46,
+    "brand": "IMT",
+    "model": "577 DV",
+    "years": "1980–2010",
+    "image": "assets/tractors/imt_577.jpg"
+  },
+  {
+    "id": 47,
+    "brand": "SAME",
+    "model": "Explorer 90",
+    "years": "1988–2004",
+    "image": "assets/tractors/same_explorer90.jpg"
+  },
+  {
+    "id": 48,
+    "brand": "SAME",
+    "model": "Explorer 110",
+    "years": "2004–2020",
+    "image": "assets/tractors/same_explorer110.jpg"
+  },
+  {
+    "id": 49,
+    "brand": "Deutz-Fahr",
+    "model": "Agroplus 85",
+    "years": "1999–2014",
+    "image": "assets/tractors/deutz_agroplus85.jpg"
+  },
+  {
+    "id": 50,
+    "brand": "Universal",
+    "model": "651",
+    "years": "1980–2005",
+    "image": "assets/tractors/universal_651.jpg"
+  },
+  {
+    "id": 51,
+    "brand": "IMT",
+    "model": "558",
+    "years": "1975–1990",
+    "image": "assets/tractors/imt_558.jpg"
+  },
+  {
+    "id": 52,
+    "brand": "IMT",
+    "model": "560",
+    "years": "1977–1995",
+    "image": "assets/tractors/imt_560.jpg"
+  },
+  {
+    "id": 53,
+    "brand": "Torpedo",
+    "model": "4806",
+    "years": "1980–1995",
+    "image": "assets/tractors/torpedo_4806.jpg"
+  },
+  {
+    "id": 54,
+    "brand": "Torpedo",
+    "model": "6206",
+    "years": "1980–1995",
+    "image": "assets/tractors/torpedo_6206.jpg"
+  },
+  {
+    "id": 55,
+    "brand": "Zetor",
+    "model": "6245",
+    "years": "1984–1992",
+    "image": "assets/tractors/zetor_6245.jpg"
+  },
+  {
+    "id": 56,
+    "brand": "Zetor",
+    "model": "7245",
+    "years": "1984–1992",
+    "image": "assets/tractors/zetor_7245.jpg"
+  },
+  {
+    "id": 57,
+    "brand": "Zetor",
+    "model": "7745",
+    "years": "1988–1996",
+    "image": "assets/tractors/zetor_7745.jpg"
+  },
+  {
+    "id": 58,
+    "brand": "Landini",
+    "model": "Rex 90",
+    "years": "2002–2015",
+    "image": "assets/tractors/landini_rex90.jpg"
+  },
+  {
+    "id": 59,
+    "brand": "Antonio Carraro",
+    "model": "Tigre 4400",
+    "years": "1998–2010",
+    "image": "assets/tractors/ac_tigre4400.jpg"
+  },
+  {
+    "id": 60,
+    "brand": "Lamborghini",
+    "model": "Premium 1060",
+    "years": "1999–2008",
+    "image": "assets/tractors/lambo_premium1060.jpg"
+  },
+  {
+    "id": 61,
+    "brand": "Steyr",
+    "model": "9094",
+    "years": "1998–2005",
+    "image": "assets/tractors/steyr_9094.jpg"
+  },
+  {
+    "id": 62,
+    "brand": "New Holland",
+    "model": "TS100",
+    "years": "1997–2003",
+    "image": "assets/tractors/nh_ts100.jpg"
+  },
+  {
+    "id": 63,
+    "brand": "SAME",
+    "model": "Dorado 86",
+    "years": "1997–2010",
+    "image": "assets/tractors/same_dorado86.jpg"
+  },
+  {
+    "id": 64,
+    "brand": "Deutz-Fahr",
+    "model": "DX 6.05",
+    "years": "1983–1990",
+    "image": "assets/tractors/deutz_dx605.jpg"
+  },
+  {
+    "id": 65,
+    "brand": "Universal",
+    "model": "445",
+    "years": "1980–2000",
+    "image": "assets/tractors/universal_445.jpg"
   }
 ]
