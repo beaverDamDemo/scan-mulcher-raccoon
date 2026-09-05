@@ -197,6 +197,18 @@
                 <p class="mt-2 text-base font-semibold text-slate-900">{{
                   formatConfidence(activeSession.result.confidence) }}</p>
               </div>
+
+              <div class="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Item ID</p>
+                <p class="mt-2 text-base font-semibold text-slate-900">{{ activeSession.result.itemId ?? 'Not found' }}
+                </p>
+              </div>
+
+              <div class="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Price</p>
+                <p class="mt-2 text-base font-semibold text-slate-900">{{ activeSession.result.price ?? 'Not found' }}
+                </p>
+              </div>
             </div>
 
             <div>

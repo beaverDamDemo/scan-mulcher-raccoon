@@ -315,6 +315,8 @@ export class App {
       confidence: ocrResult.confidence,
       lines: ocrResult.lines,
       numbers: ocrResult.numbers,
+      itemId: ocrResult.lines.find((line) => this.isItemNumberLine(line)) ?? null,
+      price: ocrResult.lines.find((line) => this.isPriceLine(line) && !this.isItemNumberLine(line)) ?? null,
       rawText: ocrResult.rawText,
       source,
     };
@@ -336,39 +338,14 @@ export class App {
       };
     }
 
-    const lokacijaIndex = cleanedLines.findIndex((line) => /^lokacija\b/i.test(line));
-    const lokacijaLine = lokacijaIndex >= 0 ? cleanedLines[lokacijaIndex] : '';
-
-    const candidateLines = cleanedLines.filter((line) => line !== lokacijaLine);
-    const numberIndex = candidateLines.findIndex((line) => this.isItemNumberLine(line));
-    const itemNumberLine = numberIndex >= 0 ? candidateLines[numberIndex] : '';
-
-    let itemNameLine = '';
-
-    if (numberIndex > 0) {
-      itemNameLine = candidateLines[numberIndex - 1];
-    } else {
-      itemNameLine = candidateLines.find((line) => !this.isPriceLine(line) && !this.isItemNumberLine(line)) ?? '';
-    }
-
-    const itemPriceLine = candidateLines.find(
-      (line) => line !== itemNameLine && line !== itemNumberLine && this.isPriceLine(line),
-    ) ?? '';
-
-    const curatedLines = [itemNameLine, itemNumberLine, itemPriceLine, lokacijaLine]
-      .map((line) => line.trim())
-      .filter((line, index, array) => line.length > 0 && array.indexOf(line) === index);
-
-    const fallbackLines = cleanedLines.slice(0, 4);
-    const finalLines = curatedLines.length > 0 ? curatedLines : fallbackLines;
-    const finalRawText = finalLines.join('\n');
+    const finalRawText = cleanedLines.join('\n');
     const finalNumbers = Array.from(
       new Set(Array.from(finalRawText.matchAll(/\d+(?:[.,:/-]\d+)*/g), ([value]) => value)),
     );
 
     return {
       confidence: ocrResult.confidence,
-      lines: finalLines,
+      lines: cleanedLines,
       numbers: finalNumbers,
       rawText: finalRawText,
     };
@@ -391,11 +368,15 @@ export class App {
       return false;
     }
 
+    if (/^\d+(?:[./-]\d+){2,}$/.test(compact)) {
+      return true;
+    }
+
     if (this.isPriceLine(line)) {
       return false;
     }
 
-    return /^[0-9][0-9A-Z/-]*$/.test(compact) && /\d/.test(compact);
+    return /^[0-9][0-9A-Z./-]*$/.test(compact) && /\d/.test(compact);
   }
 
   private buildFileStem(source: ScanRecord['source'], capturedAt: string): string {
