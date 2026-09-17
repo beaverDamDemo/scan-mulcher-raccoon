@@ -13,9 +13,9 @@ export class PageHeader {
   readonly backLink = input<string | null>(null);
   protected readonly navigationOpen = signal(false);
   protected readonly navigationItems = [
-    { label: 'Ricerca Mazze', link: '/ricerca-mazze' },
-    { label: 'Ricerca Ricambi', link: '/ricerca-pezzi-di-ricambio' },
-    { label: 'Riconosci Trattori', link: '/riconosci-trattori' },
+    { label: 'Ricerca Mazze', link: '/ricerca-mazze', icon: '🔩' },
+    { label: 'Ricerca Ricambi', link: '/ricerca-pezzi-di-ricambio', icon: '🛒' },
+    { label: 'Riconosci Trattori', link: '/riconosci-trattori', icon: '🚜' },
   ];
 
   protected toggleNavigation(): void {

@@ -32,7 +32,7 @@
       aria-label="Navigazione principale">
       @for (item of navigationItems; track item.link) {
       <a [routerLink]="item.link" routerLinkActive="page-header__nav-link--active" ariaCurrentWhenActive="page"
-        (click)="closeNavigation()">{{ item.label }}</a>
+        (click)="closeNavigation()"><span aria-hidden="true">{{ item.icon }}</span> {{ item.label }}</a>
       }
     </nav>
   </div>

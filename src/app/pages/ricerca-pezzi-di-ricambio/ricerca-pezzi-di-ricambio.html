@@ -6,33 +6,11 @@
 
       <div class="mt-4">
         <label for="pezzi-query" class="sr-only">Cerca pezzi</label>
-        <input id="pezzi-query" type="text" placeholder="duraturn 2056016"
+        <input id="pezzi-query" #queryInput type="text" placeholder="duraturn 2056016"
           class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
           (input)="onQueryInput($event)" />
 
         <!-- removed user-typed query display -->
-      </div>
-
-      <div class="mt-4 site-buttons">
-        @for (shop of defaultShops(); track shop.key) {
-        <div class="saved-shop">
-          <button type="button" [attr.data-site]="shop.key" [attr.data-initial]="shop.initial"
-            [attr.aria-label]="shop.name" class="site-button" [class]="shop.style"
-            [class.site-button--active]="activeSite() === shop.key" (click)="onSiteClick(shop.key)">{{ shop.name
-            }}</button>
-          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
-            (click)="requestDefaultShopRemoval(shop)">&times;</button>
-        </div>
-        }
-        @for (shop of savedShops(); track shop.template) {
-        <div class="saved-shop">
-          <a class="site-button site-button--saved" [attr.data-initial]="shop.name.slice(0, 1)"
-            [style.background]="shop.color" [href]="createShopSearchUrl(shop.template, query())"
-            [title]="shop.sourceUrl" target="_blank" rel="noopener noreferrer">{{ shop.name }}</a>
-          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
-            (click)="requestShopRemoval(shop)">&times;</button>
-        </div>
-        }
       </div>
 
       @if (isAddShopModalOpen()) {
@@ -47,9 +25,23 @@
           </div>
           <div class="add-shop-modal__form">
             <label for="shop-url" class="block text-sm font-medium text-slate-700">URL di ricerca del negozio</label>
+            <p class="mt-1 text-xs text-slate-500">
+              Il negozio potrebbe cercare più di una parola alla volta. Per scoprire come unisce le parole nell'URL,
+              cerca sul sito del negozio esattamente
+              <button type="button" class="test-word-button" (click)="copyTestWord('12345')"
+                title="Copia '12345' negli appunti">12345</button>
+              <button type="button" class="test-word-button" (click)="copyTestWord('abcde')"
+                title="Copia 'abcde' negli appunti">abcde</button>
+              (due parole, clicca per copiare), poi incolla qui l'URL risultante. Se necessario, correggi
+              manualmente l'URL prima di incollarlo: verrà rilevato automaticamente come separa le parole (spazio,
+              "+", "-", "_", "%20", ...).
+              @if (copiedTestWord(); as copied) {
+              <span class="test-word-copied" role="status">"{{ copied }}" copiato negli appunti.</span>
+              }
+            </p>
             <input id="shop-url" #addShopUrlInput type="url" inputmode="url" autocomplete="url" [value]="newShopUrl()"
-              placeholder="www.myshoponline.com/q=myitem1000"
-              class="mt-2 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+              placeholder="www.myshoponline.com/search?q=12345+abcde"
+              class="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
               [attr.aria-describedby]="shopUrlError() ? 'shop-url-error' : null" (input)="onNewShopUrlInput($event)"
               (keydown.enter)="addShop()" />
             @if (shopUrlError(); as error) {
@@ -127,20 +119,47 @@
       }
 
       <div class="mt-6">
-        <h2 class="block mb-2 font-medium">URL dei negozi da cercare</h2>
-        <div class="space-y-2">
+        <button type="button" class="cerca-button cerca-button--centered" [disabled]="query().trim() === ''"
+          (click)="onCerca()">🔍
+          Cerca</button>
+
+        <h2 class="block mt-6 mb-2 font-medium">URL dei negozi da cercare</h2>
+        <div class="space-y-3">
           <div *ngFor="let url of urls(); let i = index" class="flex gap-2">
             <label class="w-28 shrink-0 self-center text-sm font-medium text-slate-700"
               [attr.for]="'shop-search-url-' + i">URL {{ i + 1 }}</label>
-            <output [id]="'shop-search-url-' + i" class="generated-url">{{ url }}</output>
+            <input [id]="'shop-search-url-' + i" type="url" inputmode="url" autocomplete="off" [value]="url"
+              class="generated-url" (input)="onUrlInput(i, $event)" (keydown)="onUrlKeyDown(i, $event)" />
+            @if (url.trim() !== '') {
+            <button type="button" class="url-clear-button" [attr.aria-label]="'Cancella URL ' + (i + 1)"
+              (click)="clearUrl(i)">&times;</button>
+            }
           </div>
         </div>
 
-        <button type="button"
-          class="mt-4 rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-          [disabled]="query().trim() === ''" (click)="onCerca()">Cerca</button>
-
         <!-- URL list removed as not needed anymore -->
+      </div>
+
+      <div class="mt-8 site-buttons">
+        @for (shop of defaultShops(); track shop.key) {
+        <div class="saved-shop">
+          <button type="button" [attr.data-site]="shop.key" [attr.data-initial]="shop.initial"
+            [attr.aria-label]="shop.name" class="site-button" [class]="shop.style"
+            [class.site-button--active]="activeSite() === shop.key" (click)="onSiteClick(shop.key)">{{ shop.name
+            }}</button>
+          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
+            (click)="requestDefaultShopRemoval(shop)">&times;</button>
+        </div>
+        }
+        @for (shop of savedShops(); track shop.template) {
+        <div class="saved-shop">
+          <a class="site-button site-button--saved" [attr.data-initial]="shop.name.slice(0, 1)"
+            [style.background]="shop.color" [href]="createShopSearchUrl(shop.template, query(), shop.spaceDelimiter)"
+            [title]="shop.sourceUrl" target="_blank" rel="noopener noreferrer">{{ shop.name }}</a>
+          <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
+            (click)="requestShopRemoval(shop)">&times;</button>
+        </div>
+        }
       </div>
 
       <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">

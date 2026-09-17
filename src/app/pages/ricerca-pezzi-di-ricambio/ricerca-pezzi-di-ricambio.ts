@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgIf, NgForOf } from '@angular/common';
-import { Component, ElementRef, PLATFORM_ID, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, PLATFORM_ID, afterNextRender, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PageHeader } from '../../components/page-header/page-header';
 
@@ -8,13 +8,25 @@ const SHOP_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-shops';
 const REMOVED_DEFAULT_SHOPS_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-removed-default-shops';
 const MAX_URLS = 6;
 const SEARCH_PARAMETER_NAMES = new Set(['q', 'query', 's', 'search', 'keyword', 'keywords', 'term', 'text', 'search_q']);
-const PART_REFERENCE_PATTERN = /^\d+(?:[./-]\d+){2,}(?:___\d+)?$/;
+// Matches a path segment/param value that is *entirely* a numeric reference id, e.g. "804502"
+// (bare code) or "0.171.2614.0/10" (dot/dash separated code). Segments that mix letters with a
+// reference id (e.g. "spsearch_804502" or "10.aspx") are intentionally left untouched since they
+// are usually required for the URL to resolve at all.
+const PART_REFERENCE_PATTERN = /^(?:\d{4,}|\d+(?:[./-]\d+)+)$/;
+// Hardcoded two-word test query used to let the user reveal how a shop's site separates
+// multiple search terms in its URLs (space, "+", "-", "_", "%20", ...).
+const SPACE_DELIMITER_TEST_WORDS: [string, string] = ['12345', 'abcde'];
+const SPACE_DELIMITER_PATTERN = new RegExp(
+  `${SPACE_DELIMITER_TEST_WORDS[0]}(%20|\\+|-|_|\\.)${SPACE_DELIMITER_TEST_WORDS[1]}`,
+  'i',
+);
 
 interface SavedShop {
   name: string;
   sourceUrl: string;
   template: string;
   color: string;
+  spaceDelimiter: string | null;
 }
 
 interface DefaultShop {
@@ -71,6 +83,8 @@ export class RicercaPezziDiRicambio {
   protected readonly previewUrls = signal<PreviewUrl[]>([]);
   protected readonly activeSite = signal<string | null>(null);
   protected readonly addShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('addShopUrlInput');
+  protected readonly queryInput = viewChild<ElementRef<HTMLInputElement>>('queryInput');
+  protected readonly copiedTestWord = signal<string | null>(null);
   // Map of site keys to URL templates. `{q}` will be replaced with `encodeURIComponent(query)`.
   private readonly SITE_TEMPLATES: Record<string, string> = {
     ceneje: 'https://www.ceneje.si/Iskanje/Izdelki?q={q}',
@@ -82,6 +96,7 @@ export class RicercaPezziDiRicambio {
   };
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private lastFocusedElement: HTMLElement | null = null;
+  private copiedTestWordTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     // Ensure inputs start empty by clearing any previously saved defaults
@@ -102,6 +117,10 @@ export class RicercaPezziDiRicambio {
       if (this.isAddShopModalOpen()) {
         this.addShopUrlInput()?.nativeElement.focus();
       }
+    });
+
+    afterNextRender(() => {
+      this.queryInput()?.nativeElement.focus();
     });
   }
 
@@ -169,6 +188,25 @@ export class RicercaPezziDiRicambio {
     const target = event.target as HTMLInputElement;
     this.newShopUrl.set(target?.value ?? '');
     this.shopUrlError.set(null);
+  }
+
+  copyTestWord(word: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    navigator.clipboard?.writeText(word).catch(() => {
+      // Clipboard access may be denied; the user can still select and copy manually.
+    });
+
+    this.copiedTestWord.set(word);
+    if (this.copiedTestWordTimer) {
+      clearTimeout(this.copiedTestWordTimer);
+    }
+    this.copiedTestWordTimer = setTimeout(() => {
+      this.copiedTestWord.set(null);
+      this.copiedTestWordTimer = null;
+    }, 1500);
   }
 
   addShop(): void {
@@ -339,10 +377,10 @@ export class RicercaPezziDiRicambio {
     }
 
     const templates = [
-      ...this.defaultShops().map(shop => this.SITE_TEMPLATES[shop.key]),
-      ...this.savedShops().map(shop => shop.template),
-    ].filter((template): template is string => template !== undefined);
-    this.urls.set(templates.map(template => this.createShopSearchUrl(template, trimmedQuery)));
+      ...this.defaultShops().map(shop => ({ template: this.SITE_TEMPLATES[shop.key], spaceDelimiter: null as string | null })),
+      ...this.savedShops().map(shop => ({ template: shop.template, spaceDelimiter: shop.spaceDelimiter })),
+    ].filter((entry): entry is { template: string; spaceDelimiter: string | null; } => entry.template !== undefined);
+    this.urls.set(templates.map(entry => this.createShopSearchUrl(entry.template, trimmedQuery, entry.spaceDelimiter)));
   }
 
   private isPreviewableUrl(url: string): boolean {
@@ -362,11 +400,25 @@ export class RicercaPezziDiRicambio {
         return null;
       }
 
+      // A bare reference id in the path (e.g. ".../804502/...") is the site's real search
+      // anchor; prefer it over any coincidental query-string parameter.
+      const pathReferenceTemplate = this.replaceReferenceSegmentInPath(parsedUrl);
+      if (pathReferenceTemplate !== null) {
+        return pathReferenceTemplate;
+      }
+
+      // Hash-bang style search state (e.g. "#!search=804502") is the real anchor on some sites.
+      const hashSearchTemplate = this.replaceSearchKeyInHash(parsedUrl);
+      if (hashSearchTemplate !== null) {
+        return hashSearchTemplate;
+      }
+
       const searchParameter = [...parsedUrl.searchParams.keys()]
         .find(parameter => SEARCH_PARAMETER_NAMES.has(parameter.toLowerCase()));
       if (searchParameter !== undefined) {
+        const searchValue = parsedUrl.searchParams.get(searchParameter) ?? '';
         parsedUrl.searchParams.set(searchParameter, '{q}');
-        this.removeStalePartReferences(parsedUrl, searchParameter);
+        this.removeStalePartReferences(parsedUrl, searchParameter, searchValue);
         return parsedUrl.toString().replace('%7Bq%7D', '{q}');
       }
 
@@ -386,6 +438,51 @@ export class RicercaPezziDiRicambio {
     }
   }
 
+  private replaceReferenceSegmentInPath(url: URL): string | null {
+    const segments = url.pathname.split('/');
+    const index = segments.findIndex(segment => PART_REFERENCE_PATTERN.test(decodeURIComponent(segment)));
+    if (index === -1) {
+      return null;
+    }
+
+    segments[index] = '{q}';
+    url.pathname = segments.join('/');
+    url.hash = '';
+    for (const parameter of [...url.searchParams.keys()]) {
+      if (SEARCH_PARAMETER_NAMES.has(parameter.toLowerCase())) {
+        url.searchParams.delete(parameter);
+      }
+    }
+
+    return url.toString().replace('%7Bq%7D', '{q}');
+  }
+
+  private replaceSearchKeyInHash(url: URL): string | null {
+    const bangMatch = url.hash.match(/^#(!?)(.*)$/);
+    if (bangMatch === null || bangMatch[2] === '') {
+      return null;
+    }
+
+    const [, bang, hashBody] = bangMatch;
+    const hashParams = new URLSearchParams(hashBody);
+    const searchKey = [...hashParams.keys()].find(key => SEARCH_PARAMETER_NAMES.has(key.toLowerCase()));
+    if (searchKey === undefined) {
+      return null;
+    }
+
+    hashParams.set(searchKey, '{q}');
+    url.hash = `${bang}${hashParams.toString()}`;
+
+    // The hash carries the real search value; drop any redundant search-style query param.
+    for (const parameter of [...url.searchParams.keys()]) {
+      if (SEARCH_PARAMETER_NAMES.has(parameter.toLowerCase())) {
+        url.searchParams.delete(parameter);
+      }
+    }
+
+    return url.toString().replace('%7Bq%7D', '{q}');
+  }
+
   private createSavedShop(value: string, color = this.nextSavedShopColor()): SavedShop | null {
     try {
       const trimmedValue = value.trim();
@@ -400,21 +497,36 @@ export class RicercaPezziDiRicambio {
         sourceUrl: sourceUrl.toString(),
         template,
         color,
+        spaceDelimiter: this.detectSpaceDelimiter(trimmedValue),
       };
     } catch {
       return null;
     }
   }
 
-  private removeStalePartReferences(url: URL, searchParameter: string): void {
+  // Reveals how the shop's site separates multi-word search terms by finding the literal
+  // delimiter used between the hardcoded test words (see SPACE_DELIMITER_TEST_WORDS).
+  private detectSpaceDelimiter(rawUrl: string): string | null {
+    const match = rawUrl.match(SPACE_DELIMITER_PATTERN);
+    return match?.[1] ?? null;
+  }
+
+  private removeStalePartReferences(url: URL, searchParameter: string, searchValue: string): void {
     url.hash = '';
+
+    const searchDigits = searchValue.replace(/\D/g, '');
+    const isStaleReference = (raw: string): boolean => {
+      const decoded = decodeURIComponent(raw);
+      return PART_REFERENCE_PATTERN.test(decoded) && decoded.replace(/\D/g, '') !== searchDigits;
+    };
+
     url.pathname = url.pathname
       .split('/')
-      .filter(segment => !PART_REFERENCE_PATTERN.test(decodeURIComponent(segment)))
+      .filter(segment => !isStaleReference(segment))
       .join('/');
 
     for (const [parameter, value] of [...url.searchParams.entries()]) {
-      if (parameter !== searchParameter && PART_REFERENCE_PATTERN.test(decodeURIComponent(value))) {
+      if (parameter !== searchParameter && isStaleReference(value)) {
         url.searchParams.delete(parameter);
       }
     }
@@ -429,8 +541,18 @@ export class RicercaPezziDiRicambio {
     return SAVED_SHOP_COLORS[this.savedShops().length % SAVED_SHOP_COLORS.length];
   }
 
-  protected createShopSearchUrl(template: string, query: string): string {
-    return template.replace('{q}', encodeURIComponent(query.trim()));
+  protected createShopSearchUrl(template: string, query: string, spaceDelimiter: string | null = null): string {
+    const trimmedQuery = query.trim();
+    if (spaceDelimiter === null) {
+      return template.replace('{q}', encodeURIComponent(trimmedQuery));
+    }
+
+    const encodedValue = trimmedQuery
+      .split(/\s+/)
+      .filter(word => word !== '')
+      .map(word => encodeURIComponent(word))
+      .join(spaceDelimiter);
+    return template.replace('{q}', encodedValue);
   }
 
   private restoreUrls(): void {
