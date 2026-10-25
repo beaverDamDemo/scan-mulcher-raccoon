@@ -1,1 +1,12 @@
-<p>modal works!</p>
+<dialog #dialog [attr.aria-labelledby]="headingId" (cancel)="onCancel($event)" (click)="onDialogClick($event)">
+  <div class="modal__body">
+    <div class="modal__header">
+      <h2 [id]="headingId" class="text-lg font-semibold text-slate-900">{{ heading() }}</h2>
+      <button type="button" class="modal__close" [attr.aria-label]="closeLabel()" (click)="closed.emit()">&times;</button>
+    </div>
+    <ng-content />
+    <div class="modal__actions">
+      <ng-content select="[modalActions]" />
+    </div>
+  </div>
+</dialog>

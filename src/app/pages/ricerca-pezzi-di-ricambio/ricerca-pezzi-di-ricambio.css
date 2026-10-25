@@ -82,8 +82,8 @@
 .site-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 1rem 0.75rem;
+  margin-top: 1rem;
 }
 
 .site-button {
@@ -184,8 +184,57 @@
   position: relative;
 }
 
-.saved-shop .site-button {
-  padding-right: 1.8rem;
+/* Edit/remove actions float over the button's corner so they never crowd the label. */
+.shop-tools {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.3rem;
+  display: flex;
+  gap: 0.2rem;
+  z-index: 2;
+}
+
+.shop-tool {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.shop-tool:hover {
+  background: #f1f5f9;
+}
+
+.shop-tool--danger {
+  color: #b91c1c;
+  font-size: 1.15rem;
+}
+
+.shop-tool:focus-visible {
+  outline: 2px solid #047857;
+  outline-offset: 1px;
+}
+
+@media (hover: hover) {
+  .shop-tools {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .saved-shop:hover .shop-tools,
+  .saved-shop:focus-within .shop-tools {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .site-button[disabled],
@@ -194,45 +243,6 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-.add-shop-modal {
-  position: fixed;
-  z-index: 50;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-}
-
-.add-shop-modal__backdrop {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  background: rgba(15, 23, 42, 0.5);
-  cursor: default;
-}
-
-.add-shop-modal__dialog {
-  position: relative;
-  width: min(100%, 32rem);
-  min-height: 8rem;
-  padding: 1.25rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
-  background: #fff;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
-}
-
-.add-shop-modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.add-shop-modal__form {
-  margin-top: 1.5rem;
 }
 
 .test-word-button {
@@ -295,15 +305,6 @@
   transform-origin: top left;
 }
 
-.shop-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #e2e8f0;
-}
-
 .generated-url {
   min-width: 0;
   flex: 1;
@@ -346,118 +347,4 @@
 .url-clear-button:focus-visible {
   outline: 2px solid #059669;
   outline-offset: 1px;
-}
-
-.reset-shop-buttons {
-  padding: 0.5rem 0.9rem;
-  border: 1px solid #b91c1c;
-  border-radius: 0.5rem;
-  background: #b91c1c;
-  color: #fff;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.reset-shop-buttons:hover {
-  background: #991b1b;
-}
-
-.reset-shop-buttons:focus-visible {
-  outline: 2px solid #b91c1c;
-  outline-offset: 2px;
-}
-
-.remove-shop-button {
-  position: absolute;
-  top: 50%;
-  right: 0.25rem;
-  display: grid;
-  width: 1.25rem;
-  height: 1.25rem;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  border-radius: 0.25rem;
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 400;
-  line-height: 1;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-.edit-shop-button {
-  right: 1.7rem;
-  font-size: 0.8rem;
-}
-
-.saved-shop .site-button--editable {
-  padding-right: 3.2rem;
-}
-
-.remove-shop-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.remove-shop-button:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 1px;
-}
-
-.remove-shop-modal__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-}
-
-.remove-shop-modal__actions button {
-  padding: 0.5rem 0.9rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.remove-shop-modal__cancel {
-  border: 1px solid #94a3b8;
-  background: #fff;
-  color: #334155;
-}
-
-.remove-shop-modal__confirm {
-  border: 1px solid #b91c1c;
-  background: #b91c1c;
-  color: #fff;
-}
-
-.remove-shop-modal__confirm:hover {
-  background: #991b1b;
-}
-
-.add-shop-modal__close {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  flex: 0 0 auto;
-  border: 0;
-  border-radius: 0.25rem;
-  background: transparent;
-  color: #334155;
-  cursor: pointer;
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.add-shop-modal__close:hover {
-  background: #f1f5f9;
-}
-
-.add-shop-modal__close:focus-visible {
-  outline: 2px solid #047857;
-  outline-offset: 2px;
 }

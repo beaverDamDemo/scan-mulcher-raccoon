@@ -35,6 +35,54 @@ body {
   border-radius: 9999px;
 }
 
+/* Shared button styles */
+.btn {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #047857;
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn--secondary {
+  border-color: #94a3b8;
+  background: #fff;
+  color: #334155;
+}
+
+.btn--secondary:hover {
+  background: #f1f5f9;
+}
+
+.btn--primary {
+  background: #047857;
+  color: #fff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #065f46;
+}
+
+.btn--danger {
+  background: #b91c1c;
+  color: #fff;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #991b1b;
+}
+
 /* Warning styles for enabled 'Cancella' buttons */
 button.btn-cancella:not([disabled]) {
   background-color: #fff7ed !important; /* very light warning */

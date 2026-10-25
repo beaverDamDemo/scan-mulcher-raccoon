@@ -1,6 +1,7 @@
 import { isPlatformBrowser, NgIf, NgForOf } from '@angular/common';
-import { Component, ElementRef, PLATFORM_ID, afterNextRender, computed, effect, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, PLATFORM_ID, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Modal } from '../../components/modal/modal';
 import { PageHeader } from '../../components/page-header/page-header';
 
 const URL_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-urls';
@@ -68,7 +69,7 @@ const SAVED_SHOP_COLORS = [
 
 @Component({
   selector: 'app-ricerca-pezzi-di-ricambio',
-  imports: [PageHeader, NgIf, NgForOf],
+  imports: [PageHeader, Modal, NgIf, NgForOf],
   templateUrl: './ricerca-pezzi-di-ricambio.html',
   styleUrl: './ricerca-pezzi-di-ricambio.css',
 })
@@ -98,10 +99,8 @@ export class RicercaPezziDiRicambio {
   );
   protected readonly editShopUrl = signal('');
   protected readonly editShopError = signal<string | null>(null);
-  protected readonly editShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('editShopUrlInput');
   protected readonly previewUrls = signal<PreviewUrl[]>([]);
   protected readonly activeSite = signal<string | null>(null);
-  protected readonly addShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('addShopUrlInput');
   protected readonly queryInput = viewChild<ElementRef<HTMLInputElement>>('queryInput');
   protected readonly copiedTestWord = signal<string | null>(null);
   // Map of site keys to URL templates. `{q}` will be replaced with `encodeURIComponent(query)`.
@@ -114,7 +113,6 @@ export class RicercaPezziDiRicambio {
     shoppster: 'https://www.shoppster.si/search/{q}',
   };
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
-  private lastFocusedElement: HTMLElement | null = null;
   private copiedTestWordTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -132,18 +130,6 @@ export class RicercaPezziDiRicambio {
     this.restoreDefaultShops();
     this.restoreDefaultShopOverrides();
     this.restoreSavedShopUrls();
-
-    effect(() => {
-      if (this.isAddShopModalOpen()) {
-        this.addShopUrlInput()?.nativeElement.focus();
-      }
-    });
-
-    effect(() => {
-      if (this.isEditShopModalOpen()) {
-        this.editShopUrlInput()?.nativeElement.focus();
-      }
-    });
 
     afterNextRender(() => {
       this.queryInput()?.nativeElement.focus();
@@ -195,10 +181,7 @@ export class RicercaPezziDiRicambio {
   }
 
   openAddShopModal(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const activeElement = document.activeElement;
-      this.lastFocusedElement = activeElement instanceof HTMLElement ? activeElement : null;
-    }
+    this.dismissModals();
     this.newShopUrl.set('');
     this.shopUrlError.set(null);
     this.isAddShopModalOpen.set(true);
@@ -206,8 +189,15 @@ export class RicercaPezziDiRicambio {
 
   closeAddShopModal(): void {
     this.isAddShopModalOpen.set(false);
-    this.lastFocusedElement?.focus();
-    this.lastFocusedElement = null;
+  }
+
+  private dismissModals(): void {
+    this.isAddShopModalOpen.set(false);
+    this.isResetConfirmationOpen.set(false);
+    this.defaultShopPendingRemoval.set(null);
+    this.shopPendingRemoval.set(null);
+    this.shopBeingEdited.set(null);
+    this.defaultShopBeingEdited.set(null);
   }
 
   onNewShopUrlInput(event: Event): void {
@@ -257,10 +247,7 @@ export class RicercaPezziDiRicambio {
   }
 
   private openEditModal(url: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const activeElement = document.activeElement;
-      this.lastFocusedElement = activeElement instanceof HTMLElement ? activeElement : null;
-    }
+    this.dismissModals();
     this.editShopUrl.set(url);
     this.editShopError.set(null);
   }
@@ -268,8 +255,6 @@ export class RicercaPezziDiRicambio {
   closeEditShopModal(): void {
     this.shopBeingEdited.set(null);
     this.defaultShopBeingEdited.set(null);
-    this.lastFocusedElement?.focus();
-    this.lastFocusedElement = null;
   }
 
   onEditShopUrlInput(event: Event): void {
@@ -301,6 +286,7 @@ export class RicercaPezziDiRicambio {
     }
 
     this.savedShops.update(shops => shops.map(shop => (shop === original ? updated : shop)));
+    this.activeSite.update(site => (site === original.template ? updated.template : site));
     this.saveSavedShopUrls();
     this.populateUrlsForQuery(this.query());
     this.closeEditShopModal();
@@ -390,10 +376,12 @@ export class RicercaPezziDiRicambio {
   }
 
   requestShopRemoval(shop: SavedShop): void {
+    this.dismissModals();
     this.shopPendingRemoval.set(shop);
   }
 
   requestDefaultShopRemoval(shop: DefaultShop): void {
+    this.dismissModals();
     this.defaultShopPendingRemoval.set(shop);
   }
 
@@ -414,6 +402,7 @@ export class RicercaPezziDiRicambio {
   }
 
   requestShopReset(): void {
+    this.dismissModals();
     this.isResetConfirmationOpen.set(true);
   }
 
@@ -485,16 +474,24 @@ export class RicercaPezziDiRicambio {
   }
 
   onSiteClick(site: string): void {
+    const config = this.defaultShopConfig(site);
+    if (config !== null) {
+      this.fillSearchUrl(site, config.template, config.spaceDelimiter);
+    }
+  }
+
+  onSavedShopClick(shop: SavedShop): void {
+    this.fillSearchUrl(shop.template, shop.template, shop.spaceDelimiter);
+  }
+
+  private fillSearchUrl(siteKey: string, template: string, spaceDelimiter: string | null): void {
     const q = this.query().trim();
     if (!q) {
       // nothing to populate
       return;
     }
 
-    const config = this.defaultShopConfig(site);
-    if (config === null) return;
-
-    const url = this.createShopSearchUrl(config.template, q, config.spaceDelimiter);
+    const url = this.createShopSearchUrl(template, q, spaceDelimiter);
 
     // Insert into the first empty input, or push/replace if none available.
     this.urls.update(arr => {
@@ -521,7 +518,7 @@ export class RicercaPezziDiRicambio {
     this.saveUrls();
 
     // Toggle active state for the clicked site: clicking same site again clears it.
-    this.activeSite.set(this.activeSite() === site ? null : site);
+    this.activeSite.set(this.activeSite() === siteKey ? null : siteKey);
   }
 
   private maybeAppendInput(index: number): void {
