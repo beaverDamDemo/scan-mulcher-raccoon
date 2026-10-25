@@ -11,6 +11,10 @@
           (input)="onQueryInput($event)" />
       </div>
 
+      <button type="button" class="cerca-button cerca-button--centered" [disabled]="query().trim() === ''"
+        (click)="onCerca()">🔍
+        Cerca</button>
+
       @if (isAddShopModalOpen()) {
       <app-modal heading="Aggiungi negozio online" (closed)="closeAddShopModal()">
         <label for="shop-url" class="block text-sm font-medium text-slate-700">URL di ricerca del negozio</label>
@@ -148,10 +152,6 @@
           </div>
           }
         </div>
-
-        <button type="button" class="cerca-button cerca-button--centered" [disabled]="query().trim() === ''"
-          (click)="onCerca()">🔍
-          Cerca</button>
       </section>
 
       <section *ngIf="previewUrls().length" class="mt-8" aria-labelledby="anteprime-title">
