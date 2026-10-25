@@ -6,6 +6,7 @@ import { PageHeader } from '../../components/page-header/page-header';
 const URL_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-urls';
 const SHOP_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-shops';
 const REMOVED_DEFAULT_SHOPS_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-removed-default-shops';
+const DEFAULT_SHOP_OVERRIDES_STORAGE_KEY = 'scan-mulcher-ricerca-pezzi-default-shop-overrides';
 const MAX_URLS = 6;
 const SEARCH_PARAMETER_NAMES = new Set(['q', 'query', 's', 'search', 'keyword', 'keywords', 'term', 'text', 'search_q']);
 // Matches a path segment/param value that is *entirely* a numeric reference id, e.g. "804502"
@@ -26,6 +27,12 @@ interface SavedShop {
   sourceUrl: string;
   template: string;
   color: string;
+  spaceDelimiter: string | null;
+}
+
+interface DefaultShopOverride {
+  sourceUrl: string;
+  template: string;
   spaceDelimiter: string | null;
 }
 
@@ -80,6 +87,18 @@ export class RicercaPezziDiRicambio {
   protected readonly isResetConfirmationOpen = signal(false);
   protected readonly defaultShopPendingRemoval = signal<DefaultShop | null>(null);
   protected readonly shopPendingRemoval = signal<SavedShop | null>(null);
+  protected readonly shopBeingEdited = signal<SavedShop | null>(null);
+  protected readonly defaultShopBeingEdited = signal<DefaultShop | null>(null);
+  protected readonly defaultShopOverrides = signal<Record<string, DefaultShopOverride>>({});
+  protected readonly isEditShopModalOpen = computed(
+    () => this.shopBeingEdited() !== null || this.defaultShopBeingEdited() !== null,
+  );
+  protected readonly editShopName = computed(
+    () => this.shopBeingEdited()?.name ?? this.defaultShopBeingEdited()?.name ?? '',
+  );
+  protected readonly editShopUrl = signal('');
+  protected readonly editShopError = signal<string | null>(null);
+  protected readonly editShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('editShopUrlInput');
   protected readonly previewUrls = signal<PreviewUrl[]>([]);
   protected readonly activeSite = signal<string | null>(null);
   protected readonly addShopUrlInput = viewChild<ElementRef<HTMLInputElement>>('addShopUrlInput');
@@ -111,11 +130,18 @@ export class RicercaPezziDiRicambio {
 
     this.restoreUrls();
     this.restoreDefaultShops();
+    this.restoreDefaultShopOverrides();
     this.restoreSavedShopUrls();
 
     effect(() => {
       if (this.isAddShopModalOpen()) {
         this.addShopUrlInput()?.nativeElement.focus();
+      }
+    });
+
+    effect(() => {
+      if (this.isEditShopModalOpen()) {
+        this.editShopUrlInput()?.nativeElement.focus();
       }
     });
 
@@ -225,6 +251,144 @@ export class RicercaPezziDiRicambio {
     this.closeAddShopModal();
   }
 
+  openEditShopModal(shop: SavedShop): void {
+    this.openEditModal(shop.sourceUrl);
+    this.shopBeingEdited.set(shop);
+  }
+
+  private openEditModal(url: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const activeElement = document.activeElement;
+      this.lastFocusedElement = activeElement instanceof HTMLElement ? activeElement : null;
+    }
+    this.editShopUrl.set(url);
+    this.editShopError.set(null);
+  }
+
+  closeEditShopModal(): void {
+    this.shopBeingEdited.set(null);
+    this.defaultShopBeingEdited.set(null);
+    this.lastFocusedElement?.focus();
+    this.lastFocusedElement = null;
+  }
+
+  onEditShopUrlInput(event: Event): void {
+    this.editShopUrl.set((event.target as HTMLInputElement).value);
+    this.editShopError.set(null);
+  }
+
+  confirmEditShop(): void {
+    const defaultShop = this.defaultShopBeingEdited();
+    if (defaultShop !== null) {
+      this.confirmEditDefaultShop(defaultShop);
+      return;
+    }
+
+    const original = this.shopBeingEdited();
+    if (original === null) {
+      return;
+    }
+
+    const updated = this.createSavedShop(this.editShopUrl(), original.color);
+    if (updated === null) {
+      this.editShopError.set('Inserisci un URL valido del negozio online.');
+      return;
+    }
+
+    if (this.savedShops().some(shop => shop !== original && shop.template === updated.template)) {
+      this.editShopError.set('Questo negozio è già presente.');
+      return;
+    }
+
+    this.savedShops.update(shops => shops.map(shop => (shop === original ? updated : shop)));
+    this.saveSavedShopUrls();
+    this.populateUrlsForQuery(this.query());
+    this.closeEditShopModal();
+  }
+
+  openEditDefaultShopModal(shop: DefaultShop): void {
+    const config = this.defaultShopConfig(shop.key);
+    this.openEditModal(config?.sourceUrl ?? '');
+    this.defaultShopBeingEdited.set(shop);
+  }
+
+  private confirmEditDefaultShop(shop: DefaultShop): void {
+    const value = this.editShopUrl();
+    const template = this.createShopSearchTemplate(value);
+    if (template === null) {
+      this.editShopError.set('Inserisci un URL valido del negozio online.');
+      return;
+    }
+
+    const override: DefaultShopOverride = {
+      sourceUrl: value.trim(),
+      template,
+      spaceDelimiter: this.detectSpaceDelimiter(value.trim()),
+    };
+    this.defaultShopOverrides.update(overrides => ({ ...overrides, [shop.key]: override }));
+    this.saveDefaultShopOverrides();
+    this.populateUrlsForQuery(this.query());
+    this.closeEditShopModal();
+  }
+
+  protected defaultShopConfig(key: string): DefaultShopOverride | null {
+    const override = this.defaultShopOverrides()[key];
+    if (override !== undefined) {
+      return override;
+    }
+
+    const template = this.SITE_TEMPLATES[key];
+    return template === undefined
+      ? null
+      : { sourceUrl: template.replace('{q}', SPACE_DELIMITER_TEST_WORDS[0]), template, spaceDelimiter: null };
+  }
+
+  private restoreDefaultShopOverrides(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    try {
+      const raw = localStorage.getItem(DEFAULT_SHOP_OVERRIDES_STORAGE_KEY);
+      const parsed: unknown = raw === null ? {} : JSON.parse(raw);
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        return;
+      }
+
+      const overrides: Record<string, DefaultShopOverride> = {};
+      for (const [key, value] of Object.entries(parsed)) {
+        const candidate = value as Partial<DefaultShopOverride> | null;
+        if (
+          key in this.SITE_TEMPLATES &&
+          typeof candidate?.sourceUrl === 'string' &&
+          typeof candidate.template === 'string' &&
+          (candidate.spaceDelimiter === null || typeof candidate.spaceDelimiter === 'string')
+        ) {
+          overrides[key] = {
+            sourceUrl: candidate.sourceUrl,
+            template: candidate.template,
+            spaceDelimiter: candidate.spaceDelimiter,
+          };
+        }
+      }
+      this.defaultShopOverrides.set(overrides);
+    } catch {
+      // Ignore corrupt storage; built-in templates are used.
+    }
+  }
+
+  private saveDefaultShopOverrides(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    try {
+      localStorage.setItem(DEFAULT_SHOP_OVERRIDES_STORAGE_KEY, JSON.stringify(this.defaultShopOverrides()));
+    } catch {
+      // Storage may be unavailable; the edit remains active for this session.
+    }
+  }
+
   requestShopRemoval(shop: SavedShop): void {
     this.shopPendingRemoval.set(shop);
   }
@@ -260,6 +424,7 @@ export class RicercaPezziDiRicambio {
   confirmShopReset(): void {
     this.defaultShops.set([...DEFAULT_SHOPS]);
     this.savedShops.set([]);
+    this.defaultShopOverrides.set({});
     this.activeSite.set(null);
     this.cancelDefaultShopRemoval();
     this.cancelShopRemoval();
@@ -271,6 +436,7 @@ export class RicercaPezziDiRicambio {
 
     try {
       localStorage.removeItem(REMOVED_DEFAULT_SHOPS_STORAGE_KEY);
+      localStorage.removeItem(DEFAULT_SHOP_OVERRIDES_STORAGE_KEY);
       localStorage.removeItem(SHOP_STORAGE_KEY);
     } catch {
       // Storage may be unavailable; the reset remains active for this session.
@@ -325,10 +491,10 @@ export class RicercaPezziDiRicambio {
       return;
     }
 
-    const tmpl = this.SITE_TEMPLATES[site];
-    if (!tmpl) return;
+    const config = this.defaultShopConfig(site);
+    if (config === null) return;
 
-    const url = tmpl.replace('{q}', encodeURIComponent(q));
+    const url = this.createShopSearchUrl(config.template, q, config.spaceDelimiter);
 
     // Insert into the first empty input, or push/replace if none available.
     this.urls.update(arr => {
@@ -377,9 +543,9 @@ export class RicercaPezziDiRicambio {
     }
 
     const templates = [
-      ...this.defaultShops().map(shop => ({ template: this.SITE_TEMPLATES[shop.key], spaceDelimiter: null as string | null })),
+      ...this.defaultShops().map(shop => this.defaultShopConfig(shop.key)),
       ...this.savedShops().map(shop => ({ template: shop.template, spaceDelimiter: shop.spaceDelimiter })),
-    ].filter((entry): entry is { template: string; spaceDelimiter: string | null; } => entry.template !== undefined);
+    ].filter((entry): entry is { template: string; spaceDelimiter: string | null; } => entry !== null);
     this.urls.set(templates.map(entry => this.createShopSearchUrl(entry.template, trimmedQuery, entry.spaceDelimiter)));
   }
 

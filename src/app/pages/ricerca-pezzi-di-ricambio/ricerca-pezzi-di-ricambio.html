@@ -55,6 +55,38 @@
       </div>
       }
 
+      @if (isEditShopModalOpen()) {
+      <div class="add-shop-modal" role="presentation" (keydown.escape)="closeEditShopModal()">
+        <button type="button" class="add-shop-modal__backdrop" aria-label="Chiudi finestra"
+          (click)="closeEditShopModal()"></button>
+        <section class="add-shop-modal__dialog" role="dialog" aria-modal="true"
+          aria-labelledby="edit-shop-modal-title">
+          <div class="add-shop-modal__header">
+            <h2 id="edit-shop-modal-title" class="text-lg font-semibold text-slate-900">Modifica {{ editShopName() }}</h2>
+            <button type="button" class="add-shop-modal__close" aria-label="Chiudi finestra"
+              (click)="closeEditShopModal()">&times;</button>
+          </div>
+          <div class="add-shop-modal__form">
+            <label for="edit-shop-url" class="block text-sm font-medium text-slate-700">URL di ricerca del
+              negozio</label>
+            <input id="edit-shop-url" #editShopUrlInput type="url" inputmode="url" autocomplete="url"
+              [value]="editShopUrl()" class="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm outline-none"
+              [attr.aria-describedby]="editShopError() ? 'edit-shop-url-error' : null"
+              (input)="onEditShopUrlInput($event)" (keydown.enter)="confirmEditShop()" />
+            @if (editShopError(); as error) {
+            <p id="edit-shop-url-error" class="mt-2 text-sm text-red-700" role="alert">{{ error }}</p>
+            }
+          </div>
+          <div class="remove-shop-modal__actions">
+            <button type="button" class="remove-shop-modal__cancel" (click)="closeEditShopModal()">Annulla</button>
+            <button type="button"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="editShopUrl().trim() === ''" (click)="confirmEditShop()">Conferma</button>
+          </div>
+        </section>
+      </div>
+      }
+
       @if (isResetConfirmationOpen()) {
       <div class="add-shop-modal" role="presentation" (keydown.escape)="cancelShopReset()">
         <button type="button" class="add-shop-modal__backdrop" aria-label="Annulla ripristino"
@@ -144,18 +176,24 @@
         @for (shop of defaultShops(); track shop.key) {
         <div class="saved-shop">
           <button type="button" [attr.data-site]="shop.key" [attr.data-initial]="shop.initial"
-            [attr.aria-label]="shop.name" class="site-button" [class]="shop.style"
+            [attr.aria-label]="shop.name" class="site-button site-button--editable" [class]="shop.style"
             [class.site-button--active]="activeSite() === shop.key" (click)="onSiteClick(shop.key)">{{ shop.name
             }}</button>
+          <button type="button" class="remove-shop-button edit-shop-button"
+            [attr.aria-label]="'Modifica negozio ' + shop.name" aria-haspopup="dialog"
+            (click)="openEditDefaultShopModal(shop)">✎</button>
           <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
             (click)="requestDefaultShopRemoval(shop)">&times;</button>
         </div>
         }
         @for (shop of savedShops(); track shop.template) {
         <div class="saved-shop">
-          <a class="site-button site-button--saved" [attr.data-initial]="shop.name.slice(0, 1)"
-            [style.background]="shop.color" [href]="createShopSearchUrl(shop.template, query(), shop.spaceDelimiter)"
-            [title]="shop.sourceUrl" target="_blank" rel="noopener noreferrer">{{ shop.name }}</a>
+          <button type="button" class="site-button site-button--saved site-button--editable"
+            [attr.data-initial]="shop.name.slice(0, 1)" [style.background]="shop.color" [title]="shop.sourceUrl"
+            aria-haspopup="dialog" (click)="openEditShopModal(shop)">{{ shop.name }}</button>
+          <button type="button" class="remove-shop-button edit-shop-button"
+            [attr.aria-label]="'Modifica negozio ' + shop.name" aria-haspopup="dialog"
+            (click)="openEditShopModal(shop)">✎</button>
           <button type="button" class="remove-shop-button" [attr.aria-label]="'Rimuovi negozio ' + shop.name"
             (click)="requestShopRemoval(shop)">&times;</button>
         </div>

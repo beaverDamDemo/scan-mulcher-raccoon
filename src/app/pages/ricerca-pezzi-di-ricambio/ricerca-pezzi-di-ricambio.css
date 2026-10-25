@@ -389,6 +389,15 @@
   z-index: 2;
 }
 
+.edit-shop-button {
+  right: 1.7rem;
+  font-size: 0.8rem;
+}
+
+.saved-shop .site-button--editable {
+  padding-right: 3.2rem;
+}
+
 .remove-shop-button:hover {
   background: rgba(255, 255, 255, 0.3);
 }
